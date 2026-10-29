@@ -42,7 +42,7 @@
 html{scroll-behavior:smooth;scroll-padding-top:80px;overflow-x:clip}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--night)}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 [hidden]{display:none!important}
@@ -950,8 +950,10 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
     el.classList.add('in');
   }
   if(root.classList.contains('motion')){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){show(e.target);io.unobserve(e.target);}});},{rootMargin:'0px 0px -12% 0px',threshold:.08});
-    targets.forEach(function(t){io.observe(t);});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target._rv.forEach(show);io.unobserve(e.target);}});},{rootMargin:'0px 0px -12% 0px',threshold:.08});
+    // Bild-Reveals sind per clip-path komplett ausgeblendet – Chrome meldet sie dann nie als sichtbar.
+    // Deshalb wird bei ihnen das Elternelement beobachtet.
+    targets.forEach(function(t){var w=t.getAttribute('data-reveal')==='img'?t.parentElement:t;if(!w._rv){w._rv=[];io.observe(w);}w._rv.push(t);});
     // Sicherheitsnetz: was beim Laden schon sichtbar ist, sofort starten
     requestAnimationFrame(function(){targets.forEach(function(t){var r=t.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)show(t);});});
   } else { targets.forEach(show); }
