@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Der Sportsfreund</title>
+<meta name="description" content="Pascal Stempfle – Personal Training, Functional Training und Betriebssport/Firmenfitness in Bersenbrück und Umgebung. Jetzt kostenlose Probestunde vereinbaren.">
+<meta name="theme-color" content="#0f1b2d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%230f1b2d'/%3E%3Cpath d='M14 17v-4a6 6 0 0 1 12 0v4' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='26' r='9' fill='%232456e8'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/big-shoulders-display.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Big Shoulders Display";src:url(fonts/big-shoulders-display.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Instrument Sans";src:url(fonts/instrument-sans.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Caveat";src:url(fonts/caveat.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+
+/* Layout: „Trainer-Notizbuch“ – Papier, Tinte und Trainingsjacken-Blau. Handschriftliche Notizen, Textmarker und
+   gezeichnete Pfeile/Kreise markieren das Wichtige wie auf einem Trainingsplan. Eckige Formen, keine Einheits-Karten. */
+:root{
+  color-scheme:light;
+  --paper:#f5f3ee;     /* Notizbuch-Papier, minimal warm */
+  --sheet:#ffffff;
+  --ink:#0f1b2d;       /* Tinte / Navy */
+  --ink-2:#47536a;     /* Sekundärtext */
+  --rule:#d9d6cd;      /* Linien */
+  --blue:#2456e8;      /* Trainingsjacke */
+  --blue-ink:#ffffff;
+  --marker:#ffe36e;    /* Textmarker */
+  --night:#0f1b2d;     /* dunkle Bänder */
+  --night-2:#16243a;
+  --night-fg:#f1f4f9;
+  --night-muted:#a3afc4;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --gl:max(16px,env(safe-area-inset-left,0px));
+  --gr:max(16px,env(safe-area-inset-right,0px));
+  --max:1180px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px;overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--night)}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;line-height:.92;margin:0;text-transform:uppercase;text-wrap:balance;letter-spacing:.005em}
+h2{font-size:clamp(2.8rem,6.4vw,5rem)}
+h3{font-size:1.75rem;font-weight:800}
+p{margin:0}
+section{padding-block:clamp(72px,10vw,128px);position:relative}
+
+/* Handschrift + Markierungen */
+.hand{font-family:var(--f-hand);font-weight:700;color:var(--blue);font-size:1.7rem;line-height:1;text-transform:none;letter-spacing:0}
+.label{display:inline-flex;flex-direction:column;align-items:flex-start;gap:0}
+.label .hand{font-size:1.9rem;transform:rotate(-2deg);transform-origin:left}
+.scribble{display:block;overflow:visible}
+.scribble path{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.label .scribble{width:140px;height:12px;color:var(--blue);margin-top:-2px}
+.mark{background-image:linear-gradient(100deg,transparent 0 1%,var(--marker) 2% 97%,transparent 99%);background-repeat:no-repeat;background-size:100% 62%;background-position:0 78%;padding:0 .12em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* Buttons */
+.btn{--bg:var(--blue);--fg:var(--blue-ink);position:relative;display:inline-flex;align-items:center;gap:.6rem;font-family:var(--f-display);font-weight:800;font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:var(--fg);padding:.75rem 1.6rem .8rem;border:0;background:none;cursor:pointer;isolation:isolate}
+.btn::before{content:"";position:absolute;inset:0;background:var(--bg);transform:skewX(-10deg);z-index:-1;transition:transform .25s var(--ease),background .2s}
+.btn:hover::before{transform:skewX(-10deg) translateX(4px)}
+.btn svg{width:20px;height:20px;transition:transform .25s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.btn.line{--fg:currentColor}
+.btn.line::before{background:transparent;border:2px solid currentColor}
+.btn.light{--bg:var(--sheet);--fg:var(--ink)}
+
+/* ---------- Header ---------- */
+.site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--night);color:var(--night-fg);transition:box-shadow .3s}
+.site-header.scrolled{box-shadow:0 8px 30px rgba(8,14,26,.35)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:70px}
+.logo{display:flex;align-items:center;text-decoration:none;color:inherit}
+.logo svg{height:46px;width:auto;overflow:visible}
+.logo .k-handle,.logo .k-body{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.logo .k-handle{stroke:currentColor;stroke-width:3.2}
+.logo .k-body{stroke:var(--blue);stroke-width:3.2}
+.logo .k-fill{fill:var(--blue)}
+.logo .w-der{font-family:var(--f-hand);font-weight:700;font-size:17px;fill:var(--blue)}
+.logo .w-main{font-family:var(--f-display);font-weight:900;font-size:27px;letter-spacing:.02em;fill:currentColor;stroke:currentColor;stroke-width:0}
+.logo .w-main tspan{fill:var(--blue);stroke:var(--blue)}
+.menu{display:flex;align-items:center;gap:.2rem;list-style:none;margin:0;padding:0}
+.menu a{position:relative;display:block;text-decoration:none;font-weight:600;font-size:.95rem;padding:.55rem .8rem;color:var(--night-muted);transition:color .2s}
+.menu a::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:.3rem;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.menu a:hover,.menu a.active{color:var(--night-fg)}
+.menu a:hover::after,.menu a.active::after{transform:scaleX(1)}
+.menu .cta{margin-left:.6rem}
+.menu .cta a{color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.15rem;letter-spacing:.05em;text-transform:uppercase;padding:.5rem 1.2rem;isolation:isolate}
+.menu .cta a::after{inset:0;height:auto;background:var(--blue);transform:skewX(-10deg);z-index:-1}
+.burger{display:none;background:none;border:0;color:inherit;padding:.5rem;cursor:pointer}
+.burger svg{width:30px;height:30px}
+.burger line{transition:transform .3s var(--ease),opacity .2s;transform-origin:center}
+.burger[aria-expanded="true"] .b1{transform:translateY(5px) rotate(45deg)}
+.burger[aria-expanded="true"] .b2{opacity:0}
+.burger[aria-expanded="true"] .b3{transform:translateY(-5px) rotate(-45deg)}
+@media (max-width:940px){
+  .burger{display:block}
+  .menu{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;background:var(--night);padding:.5rem var(--gr) 1.2rem var(--gl);border-top:1px solid rgba(255,255,255,.08);clip-path:inset(0 0 100% 0);transition:clip-path .4s var(--ease);pointer-events:none}
+  .menu.open{clip-path:inset(0 0 0 0);pointer-events:auto}
+  .menu a{padding:.85rem .2rem;font-size:1.1rem}
+  .menu a::after{left:.2rem;right:auto;width:40px}
+  .menu .cta{margin:.6rem 0 0}
+  .menu .cta a{text-align:center;padding:.8rem}
+}
+
+/* ---------- Hero ---------- */
+.hero{background:var(--night);color:var(--night-fg);padding-block:clamp(40px,6vw,80px) 0;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(24px,4vw,56px);align-items:center}
+.hero-copy{display:flex;flex-direction:column;gap:1.5rem;min-width:0;padding-bottom:clamp(32px,5vw,72px)}
+.hero .hey{font-family:var(--f-hand);font-weight:700;color:var(--blue);font-size:clamp(2.6rem,5vw,4rem);line-height:.8;display:block;transform:rotate(-4deg);transform-origin:left bottom;margin-bottom:.1em}
+.hero h1{font-size:clamp(3.2rem,6.2vw,6.4rem);line-height:.84;letter-spacing:-.005em}
+.hero h1 .word{display:inline-block;position:relative}
+.hero h1 .scribble{position:absolute;left:-2%;right:-2%;bottom:-.16em;width:104%;height:.22em;color:var(--blue)}
+.hero h1 .scribble path{stroke-width:5}
+.hero-copy > p{font-size:1.18rem;color:var(--night-muted);max-width:47ch}
+.hero-copy > p b{color:var(--night-fg);font-weight:600}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:1.1rem 1.4rem}
+.hero-actions .btn.line{color:var(--night-fg)}
+.hero-stats{display:flex;flex-wrap:wrap;gap:2rem;padding-top:1.3rem;border-top:1px dashed rgba(255,255,255,.18)}
+.stat b{display:block;font-family:var(--f-display);font-weight:900;font-size:2.6rem;line-height:.9;color:var(--night-fg);font-variant-numeric:tabular-nums}
+.stat > span{font-size:.82rem;color:var(--night-muted);text-transform:uppercase;letter-spacing:.12em}
+.hero-visual{position:relative;align-self:center;min-width:0;padding-bottom:40px}
+.photo-frame{position:relative;background:var(--sheet);padding:12px 12px 52px;transform:rotate(2.2deg);box-shadow:0 30px 60px rgba(0,0,0,.45)}
+.photo-frame img{width:100%;height:auto;aspect-ratio:4/3.3;object-fit:cover}
+.photo-frame .caption{position:absolute;left:18px;right:18px;bottom:12px;font-family:var(--f-hand);font-weight:700;font-size:1.65rem;color:var(--ink);line-height:1}
+.tape{position:absolute;width:110px;height:30px;background:rgba(255,236,170,.75);box-shadow:0 1px 3px rgba(0,0,0,.15);z-index:2}
+.tape.t1{top:-12px;left:22px;transform:rotate(-8deg)}
+.tape.t2{top:-10px;right:28px;transform:rotate(6deg)}
+.hero-note{position:absolute;left:-74px;top:30%;display:flex;flex-direction:column;align-items:flex-end;color:var(--marker);z-index:3;pointer-events:none}
+.hero-note .hand{color:var(--marker);font-size:1.6rem;transform:rotate(-6deg);white-space:nowrap}
+.hero-note svg{width:70px;height:46px;margin-right:-26px;color:var(--marker)}
+.quote-rotator{position:relative;margin-top:.4rem;min-height:4.4em;max-width:46ch;padding-left:1.1rem;border-left:3px solid var(--blue)}
+.quote-rotator q{display:block;font-size:1.02rem;color:var(--night-fg);quotes:"„" "“"}
+.quote-rotator cite{display:block;font-style:normal;font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);line-height:1.2}
+.quote-rotator .q{transition:opacity .5s,transform .5s var(--ease)}
+.quote-rotator .q.out{opacity:0;transform:translateY(6px)}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-visual{order:-1;max-width:440px;width:84%;margin:0 auto;padding-bottom:0}
+  .photo-frame{margin:10px 0 0}
+  .hero-note{display:none}
+}
+
+/* Laufband */
+.ticker-wrap{overflow:hidden;margin-top:-14px;padding-block:14px 6px;position:relative;z-index:4}
+.ticker{background:var(--blue);color:#fff;overflow:hidden;border-block:3px solid var(--night);transform:rotate(-1.2deg);margin:0 -10px}
+.ticker-track{display:flex;width:max-content;animation:tick 34s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(1.4rem,2.6vw,2rem);letter-spacing:.03em;padding:.55rem 1.1rem;white-space:nowrap;display:flex;align-items:center;gap:2.2rem}
+.ticker span::after{content:"";width:14px;height:14px;background:var(--marker);transform:rotate(45deg)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- Kundenstimmen ---------- */
+.reviews-section{padding-top:clamp(96px,12vw,150px)}
+.section-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:1.5rem 3rem;margin-bottom:clamp(40px,6vw,72px)}
+.section-head > div{display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.section-head .aside{max-width:36ch;color:var(--ink-2);font-size:1.05rem}
+@media (max-width:760px){.section-head{grid-template-columns:1fr}}
+
+.feature-review{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(28px,5vw,72px);align-items:center;margin-bottom:clamp(56px,8vw,96px)}
+.feature-review blockquote{margin:0;position:relative;min-width:0}
+.feature-review blockquote p{font-family:var(--f-display);font-weight:800;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.02;text-transform:uppercase}
+.feature-review .bigq{font-family:Georgia,"Times New Roman",serif;font-size:9rem;line-height:.6;color:var(--blue);display:block;height:4.2rem}
+.sig{display:flex;flex-direction:column;gap:.1rem;margin-top:1.6rem}
+.sig .hand{font-size:2.3rem;color:var(--ink);transform:rotate(-2deg);transform-origin:left}
+.sig small{font-size:.8rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-2);font-weight:600}
+.polaroid{position:relative;background:var(--sheet);padding:10px 10px 44px;box-shadow:0 14px 34px rgba(15,27,45,.18);transform:rotate(var(--rot,2deg));transition:transform .4s var(--ease)}
+.polaroid img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center 30%}
+.polaroid .cap{position:absolute;left:12px;right:12px;bottom:8px;font-family:var(--f-hand);font-weight:700;font-size:1.45rem;line-height:1.1;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.polaroid:hover{transform:rotate(0deg) scale(1.02)}
+.polaroid .tape{width:84px;height:26px;top:-11px;left:50%;margin-left:-42px;transform:rotate(-3deg)}
+.feature-review .polaroid{--rot:3deg;max-width:380px;justify-self:center}
+
+.review-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(48px,6vw,72px) clamp(28px,4vw,48px)}
+.review{display:grid;grid-template-columns:180px 1fr;gap:1.6rem;align-items:start;min-width:0}
+.review .polaroid{padding:8px 8px 36px}
+.review .polaroid .cap{font-size:1.2rem}
+.review:nth-child(odd) .polaroid{--rot:-3deg}
+.review:nth-child(even) .polaroid{--rot:2.5deg}
+.review blockquote{margin:0;min-width:0;display:flex;flex-direction:column;gap:1rem;padding-top:.4rem}
+.review blockquote p{font-size:1.1rem;line-height:1.6}
+.review blockquote p::before{content:"„";font-family:Georgia,serif;color:var(--blue);font-weight:700;margin-right:.08em}
+.review blockquote p::after{content:"“";font-family:Georgia,serif;color:var(--blue);font-weight:700}
+.review .sig{margin-top:0;padding-top:.8rem;border-top:1px dashed var(--rule)}
+.review .sig .hand{font-size:1.9rem}
+.review .sig a{color:var(--blue);font-weight:600;font-size:.9rem;text-decoration:none}
+.review .sig a:hover{text-decoration:underline}
+@media (max-width:980px){.review-grid{grid-template-columns:1fr}}
+@media (max-width:760px){.feature-review{grid-template-columns:1fr}.feature-review .polaroid{order:-1;max-width:300px}}
+@media (max-width:480px){.review{grid-template-columns:1fr}.review .polaroid{max-width:240px}}
+
+.reviews-cta{margin-top:clamp(56px,8vw,88px);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem 2rem;text-align:center}
+.reviews-cta .hand{font-size:2.1rem;color:var(--ink)}
+.reviews-cta svg.arrow{width:64px;height:40px;color:var(--blue)}
+
+/* ---------- Über mich ---------- */
+.about{background:var(--sheet);border-block:1px solid var(--rule)}
+.about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(36px,7vw,96px);align-items:start}
+.about-photo{position:relative;padding-top:10px}
+.about-photo .polaroid{--rot:-2.5deg}
+.about-photo .polaroid img{aspect-ratio:3/4}
+.about-photo .note{position:absolute;right:-40px;top:-6px;display:flex;flex-direction:column;align-items:center}
+.about-photo .note .hand{font-size:1.8rem;transform:rotate(8deg)}
+.about-photo .note svg{width:50px;height:54px;color:var(--blue);margin-left:-40px}
+.since{position:absolute;left:-14px;bottom:70px;background:var(--blue);color:#fff;padding:.7rem 1rem .8rem;transform:rotate(-4deg);line-height:1;font-family:var(--f-display);text-transform:uppercase;box-shadow:0 10px 24px rgba(36,86,232,.35)}
+.since span{display:block;font-weight:700;font-size:.95rem;letter-spacing:.1em}
+.since b{display:block;font-weight:900;font-size:3rem}
+.about-copy{display:flex;flex-direction:column;gap:1.35rem;min-width:0}
+.about-copy h2{font-size:clamp(2.5rem,5.4vw,4.3rem)}
+.about-copy p{max-width:62ch}
+.motto{position:relative;padding:1.6rem 1.6rem 1.5rem;background:var(--paper);border:1px solid var(--rule);margin-top:.4rem}
+.motto .hand{position:absolute;top:-18px;left:18px;background:var(--sheet);padding:0 .5rem;font-size:1.6rem}
+.motto strong{display:block;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(2rem,3.8vw,2.9rem);line-height:.95;margin-bottom:.6rem}
+.motto p{color:var(--ink-2)}
+.video-link{display:inline-flex;align-items:center;gap:1rem;text-decoration:none;align-self:flex-start;padding:.3rem 0}
+.video-link .play{position:relative;flex:0 0 58px;height:58px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}
+.video-link .play::after{content:"";position:absolute;inset:-6px;border:2px solid var(--blue);border-radius:50%;animation:pulse 2.4s var(--ease) infinite}
+@keyframes pulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.video-link .play svg{width:22px;height:22px;margin-left:3px}
+.video-link b{display:block;font-weight:700}
+.video-link span span{display:block;font-size:.88rem;color:var(--ink-2)}
+.creed{font-family:var(--f-display);font-weight:700;font-size:clamp(1.6rem,2.6vw,2rem);line-height:1.12;text-transform:uppercase;margin-top:.6rem;padding-top:1.4rem;border-top:3px solid var(--ink)}
+.creed + p{color:var(--ink-2)}
+@media (max-width:900px){.about-grid{grid-template-columns:1fr}.about-photo{max-width:400px;margin:0 auto 20px}.about-photo .note{right:-6px}}
+
+/* ---------- Personal Training ---------- */
+.pt{background-color:var(--paper);background-image:linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% 34px;background-position:0 12px}
+.pt::before{content:"";position:absolute;top:0;bottom:0;left:max(24px,calc(50% - 640px));width:2px;background:rgba(229,90,90,.35)}
+.pt-intro{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:end;margin-bottom:clamp(40px,6vw,64px)}
+.pt-intro > div{display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.pt-intro blockquote{margin:0;font-family:var(--f-hand);font-weight:700;font-size:clamp(2.2rem,4vw,3.2rem);line-height:1.05;color:var(--blue);transform:rotate(-2deg)}
+.pt-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,80px)}
+.pt-copy{display:flex;flex-direction:column;gap:1.4rem;min-width:0}
+.checklist{list-style:none;margin:0;padding:0;display:grid;gap:.4rem;background:var(--sheet);border:1px solid var(--rule);padding:1.2rem 1.3rem;box-shadow:6px 6px 0 var(--ink)}
+.checklist li{display:grid;grid-template-columns:30px 1fr;gap:.8rem;align-items:start;padding:.5rem 0;font-weight:500}
+.checklist li + li{border-top:1px dashed var(--rule)}
+.checklist svg{width:26px;height:26px;margin-top:1px}
+.checklist .box{fill:none;stroke:var(--ink);stroke-width:2}
+.checklist .tick{fill:none;stroke:var(--blue);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.answer{position:relative;align-self:flex-start;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(1.6rem,3.6vw,2.8rem);line-height:1;padding:.35em .5em}
+.answer .scribble{position:absolute;inset:0;width:100%;height:100%;color:var(--blue)}
+.answer .scribble path{stroke-width:2.6}
+.places{display:flex;flex-wrap:wrap;gap:.6rem}
+.places span{display:inline-flex;align-items:center;gap:.5rem;background:var(--ink);color:#fff;padding:.4rem .9rem;font-weight:600;font-size:.95rem}
+.places svg{width:17px;height:17px}
+.pt-photos{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-content:start}
+.pt-photos figure{margin:0;overflow:hidden;background:var(--rule)}
+.pt-photos figure:first-child{grid-column:span 2}
+.pt-photos img{width:100%;height:100%;object-fit:cover;aspect-ratio:3/4}
+.pt-photos figure:first-child img{aspect-ratio:16/11}
+.functional{margin-top:clamp(56px,8vw,96px);display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:var(--sheet);border:2px solid var(--ink)}
+.functional > div{padding:1.7rem 1.6rem;display:flex;flex-direction:column;gap:.8rem;min-width:0}
+.functional > div + div{border-left:2px solid var(--ink)}
+.functional h3{font-size:1.65rem}
+.functional p{color:var(--ink-2);font-size:.98rem}
+.vs{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .7rem;font-family:var(--f-hand);font-weight:700;font-size:1.55rem;line-height:1}
+.vs .old{position:relative;color:var(--ink-2)}
+.vs .old .scribble{position:absolute;left:-4%;top:42%;width:108%;height:10px;color:#d64545}
+.vs .new{color:var(--blue)}
+@media (max-width:900px){.pt-intro,.pt-grid{grid-template-columns:1fr}.functional{grid-template-columns:1fr}.functional > div + div{border-left:0;border-top:2px solid var(--ink)}.pt::before{display:none}}
+
+/* ---------- Firmenfitness ---------- */
+.biz{background:var(--night);color:var(--night-fg);overflow:hidden}
+.biz .hand{color:var(--marker)}
+.biz .label .scribble{color:var(--marker)}
+.biz-head{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,72px);align-items:center;margin-bottom:clamp(48px,7vw,88px)}
+.biz-head > div{display:flex;flex-direction:column;gap:1.2rem;min-width:0}
+.biz-head p{color:var(--night-muted);font-size:1.12rem;max-width:52ch}
+.biz-img{position:relative}
+.biz-img img{width:100%;aspect-ratio:16/10;object-fit:cover;clip-path:polygon(6% 0,100% 0,94% 100%,0 100%)}
+.benefits{list-style:none;margin:0;padding:0;counter-reset:b}
+.benefits li{counter-increment:b;display:grid;grid-template-columns:clamp(80px,12vw,150px) 1fr 1.25fr;gap:clamp(16px,3vw,40px);align-items:start;padding-block:clamp(26px,3.6vw,40px);border-top:1px solid rgba(255,255,255,.14)}
+.benefits li:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
+.benefits li::before{content:counter(b);font-family:var(--f-display);font-weight:900;font-size:clamp(4rem,9vw,7rem);line-height:.75;color:transparent;-webkit-text-stroke:2px var(--blue);transition:color .5s}
+.benefits li:hover::before{color:var(--blue)}
+.benefits h3{font-size:clamp(1.7rem,3vw,2.3rem);padding-top:.2rem}
+.benefits h3 small{display:block;font-family:var(--f-hand);text-transform:none;font-weight:700;font-size:1.45rem;color:var(--marker);margin-top:.5rem;letter-spacing:0;line-height:1.1}
+.benefits .txt{display:flex;flex-direction:column;gap:.7rem;color:var(--night-muted);font-size:.98rem;min-width:0}
+@media (max-width:860px){.biz-head{grid-template-columns:1fr}.benefits li{grid-template-columns:64px 1fr}.benefits .txt{grid-column:2}}
+.clients{margin-top:clamp(56px,8vw,96px)}
+.clients-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem;margin-bottom:1.6rem}
+.clients-head h3{font-size:clamp(1.8rem,3vw,2.4rem)}
+.client-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.client{position:relative;display:flex;flex-direction:column;text-decoration:none;background:var(--sheet);color:var(--ink);transition:transform .3s var(--ease)}
+.client:hover{transform:translateY(-5px) rotate(-.6deg)}
+.client .pic{aspect-ratio:16/10;overflow:hidden;background:#fff;display:grid;place-items:center}
+.client .pic img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.client .pic.contain img{object-fit:contain;padding:14px}
+.client:hover .pic img{transform:scale(1.05)}
+.client .meta{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.25rem;flex:1;border-top:3px solid var(--blue)}
+.client b{font-weight:700;line-height:1.3}
+.client span{font-size:.85rem;color:var(--blue);font-weight:600;margin-top:auto}
+@media (max-width:900px){.client-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:440px){.client-grid{grid-template-columns:1fr}}
+
+/* ---------- Kontakt ---------- */
+.contact{padding-bottom:clamp(80px,10vw,128px)}
+.contact-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,80px);align-items:start}
+.contact-copy{display:flex;flex-direction:column;gap:1.3rem;min-width:0}
+.contact-copy p{font-size:1.15rem;max-width:46ch;color:var(--ink-2)}
+.promise{position:relative;align-self:flex-start;margin-top:.6rem}
+.promise .hand{font-size:clamp(2rem,3.6vw,2.8rem);color:var(--ink);transform:rotate(-3deg);display:block}
+.promise svg{position:absolute;right:-90px;top:10px;width:84px;height:60px;color:var(--blue)}
+.contact-card{background:var(--sheet);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--blue);padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:0;min-width:0}
+.ci{display:grid;grid-template-columns:44px 1fr auto;gap:1rem;align-items:center;padding-block:1rem}
+.ci + .ci{border-top:1px dashed var(--rule)}
+.ci .ic{width:44px;height:44px;background:var(--ink);color:#fff;display:grid;place-items:center}
+.ci .ic svg{width:21px;height:21px}
+.ci small{display:block;font-size:.76rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-2);font-weight:600}
+.ci a,.ci address{font-style:normal;font-weight:700;font-size:1.12rem;text-decoration:none;overflow-wrap:anywhere;user-select:all}
+.ci > div{min-width:0}
+.copy{border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:.35rem .75rem;font:600 .82rem var(--f-body);cursor:pointer;transition:background .2s,color .2s}
+.copy:hover{background:var(--ink);color:#fff}
+.contact-card .btn{margin-top:1.2rem;align-self:flex-start}
+.map-note{margin-top:1rem;font-size:.85rem;color:var(--ink-2)}
+@media (max-width:900px){.contact-grid{grid-template-columns:1fr}.promise svg{display:none}}
+
+/* ---------- Footer ---------- */
+footer{background:var(--night);color:var(--night-muted);padding-block:clamp(56px,7vw,80px) 28px;font-size:.95rem}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.4rem}
+.foot .logo svg{height:64px}
+.foot address{font-style:normal;line-height:1.75;margin-top:1.2rem}
+.foot address b{color:var(--night-fg)}
+.foot h4{margin:0 0 .8rem;font-family:var(--f-hand);font-size:1.6rem;font-weight:700;color:var(--marker);line-height:1}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:.4rem}
+.foot a,.foot button{background:none;border:0;padding:0;color:var(--night-muted);font:inherit;cursor:pointer;text-decoration:none;text-align:left}
+.foot a:hover,.foot button:hover{color:var(--night-fg);text-decoration:underline}
+.copyline{margin-top:3rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.1);font-size:.85rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem}
+@media (max-width:760px){.foot{grid-template-columns:1fr}}
+
+/* ---------- Rechtstexte ---------- */
+dialog.legal{border:2px solid var(--ink);padding:0;width:min(760px,calc(100vw - 32px));max-height:min(86vh,900px);background:var(--sheet);color:var(--ink);box-shadow:12px 12px 0 var(--blue)}
+dialog.legal[open]{animation:pop .35s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(16px)}}
+dialog.legal::backdrop{background:rgba(10,18,32,.65)}
+.legal-head{position:sticky;top:0;background:var(--sheet);display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.1rem 1.4rem;border-bottom:2px solid var(--ink);z-index:1}
+.legal-head h2{font-size:2.2rem}
+.legal-body{padding:1.4rem;display:flex;flex-direction:column;gap:1rem;font-size:.97rem}
+.legal-body h3{font-size:1.4rem;margin-top:.6rem}
+.legal-body p,.legal-body li{max-width:68ch}
+.legal-body a,.inline-btn{color:var(--blue);overflow-wrap:anywhere}
+.inline-btn{background:none;border:0;padding:0;font:inherit;text-decoration:underline;cursor:pointer}
+.xbtn{background:var(--sheet);border:2px solid var(--ink);color:var(--ink);width:40px;height:40px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto;transition:transform .2s}
+.xbtn:hover{transform:rotate(90deg)}
+.xbtn svg{width:18px;height:18px}
+
+/* ---------- Cookie-Banner ---------- */
+.cookie{position:fixed;left:0;right:0;bottom:0;z-index:80;padding:0 var(--gr) calc(16px + env(safe-area-inset-bottom,0px)) var(--gl);display:flex;justify-content:flex-start;pointer-events:none}
+.cookie-box{pointer-events:auto;width:min(520px,100%);background:var(--sheet);color:var(--ink);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--blue);padding:1.3rem;display:flex;flex-direction:column;gap:.85rem;max-height:calc(100vh - 40px);overflow:auto;animation:slideup .5s var(--ease)}
+@keyframes slideup{from{transform:translateY(30px);opacity:0}}
+.cookie-top{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.cookie-top h2{font-size:1.8rem}
+.cookie p{font-size:.92rem;color:var(--ink-2)}
+.cookie-links{display:flex;gap:1rem}
+.cookie-links button{color:var(--blue);background:none;border:0;padding:0;font:inherit;font-size:.9rem;cursor:pointer;text-decoration:underline}
+.cats{display:grid;gap:6px}
+.cat{border:1px solid var(--rule);background:var(--paper)}
+.cat summary{display:flex;align-items:center;gap:.8rem;padding:.65rem .85rem;cursor:pointer;list-style:none;font-weight:600;font-size:.95rem}
+.cat summary::-webkit-details-marker{display:none}
+.cat .chev{margin-left:auto;width:18px;height:18px;color:var(--ink-2);transition:transform .2s}
+.cat[open] .chev{transform:rotate(90deg)}
+.cat .desc{padding:0 .9rem .9rem 3.5rem;font-size:.86rem;color:var(--ink-2)}
+.cat .desc ul{margin:.4rem 0 0;padding-left:1rem}
+.switch{position:relative;flex:0 0 40px;height:22px}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.switch i{position:absolute;inset:0;border-radius:999px;background:#c9c6bd;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .2s var(--ease)}
+.switch input:checked + i{background:var(--blue)}
+.switch input:checked + i::after{transform:translateX(18px)}
+.switch input:disabled + i{opacity:.6}
+.switch input:focus-visible + i{outline:3px solid var(--blue);outline-offset:2px}
+.cookie-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cookie-btns button{font:700 .95rem var(--f-body);padding:.75rem 1rem;cursor:pointer;border:2px solid var(--ink);background:transparent;color:var(--ink);transition:background .2s,color .2s}
+.cookie-btns button:hover{background:var(--ink);color:#fff}
+.cookie-btns .all{grid-column:span 2;background:var(--blue);border-color:var(--blue);color:#fff}
+.cookie-btns .all:hover{background:var(--ink);border-color:var(--ink)}
+.toast{white-space:nowrap;position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:.6rem 1.1rem;font-weight:600;font-size:.9rem;z-index:90}
+
+/* ================= MOTION ================= */
+/* Ohne JavaScript oder bei „Bewegung reduzieren“ ist alles sofort sichtbar. */
+.motion [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
+.motion [data-reveal].in{opacity:1;transform:none}
+.motion [data-reveal="img"]{opacity:1;transform:none;clip-path:inset(0 0 100% 0);transition:clip-path 1.1s var(--ease);transition-delay:var(--d,0s)}
+.motion [data-reveal="img"] img{transform:scale(1.18);transition:transform 1.6s var(--ease);transition-delay:var(--d,0s)}
+.motion [data-reveal="img"].in{clip-path:inset(0 0 0 0)}
+.motion [data-reveal="img"].in img{transform:scale(1)}
+.motion [data-reveal="drop"]{opacity:0;transform:translateY(-40px) rotate(calc(var(--rot,2deg) * -3));transition:opacity .7s var(--ease),transform 1s cubic-bezier(.3,1.5,.5,1);transition-delay:var(--d,0s)}
+.motion [data-reveal="drop"].in{opacity:1;transform:rotate(var(--rot,2deg))}
+.motion .polaroid[data-reveal="drop"].in:hover{transform:rotate(0) scale(1.02)}
+/* Gezeichnete Linien */
+.motion .draw path,.motion .draw circle,.motion .draw rect.box{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s var(--ease);transition-delay:var(--d,0s)}
+.motion .draw.in path,.motion .draw.in circle,.motion .draw.in rect.box{stroke-dashoffset:0}
+.motion .draw .tick{transition-delay:calc(var(--d,0s) + .35s)}
+/* Textmarker */
+.motion .mark{background-size:0% 62%;transition:background-size 1s var(--ease);transition-delay:var(--d,.2s)}
+.motion .mark.in{background-size:100% 62%}
+/* Logo zeichnet sich */
+.motion .logo.anim .k-handle,.motion .logo.anim .k-body{stroke-dasharray:1;stroke-dashoffset:1;animation:drawline 1.1s var(--ease) forwards}
+.motion .logo.anim .k-body{animation-delay:.35s}
+.motion .logo.anim .k-fill{opacity:0;transform:scale(0);transform-origin:20px 27px;animation:popin .5s cubic-bezier(.3,1.6,.5,1) 1.2s forwards}
+.motion .logo.anim .w-main{stroke-width:1;fill-opacity:0;stroke-dasharray:120;stroke-dashoffset:120;animation:drawtext 1.8s var(--ease) .4s forwards}
+.motion .logo.anim .w-der{opacity:0;animation:fadein .6s ease 1.6s forwards}
+@keyframes drawline{to{stroke-dashoffset:0}}
+@keyframes drawtext{70%{stroke-dashoffset:0;fill-opacity:0}100%{stroke-dashoffset:0;fill-opacity:1;stroke-width:0}}
+@keyframes popin{to{opacity:1;transform:scale(1)}}
+@keyframes fadein{to{opacity:1}}
+/* Hero-Einstieg */
+.motion .hero .hey{opacity:0;transform:rotate(-4deg) translateX(-20px);animation:heyin .8s var(--ease) .3s forwards}
+@keyframes heyin{to{opacity:1;transform:rotate(-4deg)}}
+.motion .hero h1 .word{opacity:0;transform:translateY(.4em);animation:wordin .9s var(--ease) forwards}
+.motion .hero h1 .w1{animation-delay:.45s}
+@keyframes wordin{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .ticker-track{transform:none}
+}
+</style>
+</head>
+<body>
+<header class="site-header" id="top">
+  <nav class="wrap nav" aria-label="Hauptnavigation">
+    <a class="logo anim" href="#start" aria-label="Der Sportsfreund – zum Seitenanfang">
+      <svg viewBox="0 0 250 46" role="img" aria-hidden="true">
+        <path class="k-handle" pathLength="1" d="M13 20 V14 a7 7 0 0 1 14 0 V20"/>
+        <circle class="k-body" pathLength="1" cx="20" cy="29" r="12"/>
+        <circle class="k-fill" cx="20" cy="29" r="6.5"/>
+        <text class="w-der" x="44" y="16">der</text>
+        <text class="w-main" x="44" y="40">SPORTS<tspan>FREUND</tspan></text>
+      </svg>
+    </a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Menü öffnen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line class="b1" x1="4" y1="7" x2="20" y2="7"/><line class="b2" x1="4" y1="12" x2="20" y2="12"/><line class="b3" x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <ul class="menu" id="menu">
+      <li><a href="#kundenstimmen">Kundenstimmen</a></li>
+      <li><a href="#ueber-mich">Über mich</a></li>
+      <li><a href="#personal-training">Personal Training</a></li>
+      <li><a href="#firmenfitness">Betriebssport/Firmenfitness</a></li>
+      <li class="cta"><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="start">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1><span class="hey">Hey</span><span class="word w1">Sportsfreund!<svg class="scribble draw" data-reveal-draw style="--d:1.1s" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 11 C 50 4, 110 3, 160 7 S 250 13, 297 5"/></svg></span></h1>
+      <p data-reveal style="--d:.7s">Möchtest du fit bleiben für die Anstrengungen des Alltags? Ein paar Kilo abnehmen? Oder deinen Mitarbeitern etwas Gutes tun und Betriebssport anbieten? <b>Egal was für sportliche Ziele du hast, wir erreichen sie gemeinsam!</b></p>
+      <div class="hero-actions" data-reveal style="--d:.85s">
+        <a class="btn" href="#kontakt">Kostenlose Probestunde<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn line" href="#kundenstimmen">Kundenstimmen</a>
+      </div>
+      <div class="quote-rotator" data-reveal style="--d:1s" aria-live="polite">
+        <div class="q" id="qr"><q>Er fordert, aber überfordert nicht.</q><cite>Robert Lemme</cite></div>
+      </div>
+      <div class="hero-stats" data-reveal style="--d:1.1s">
+        <div class="stat"><b><span data-count="11">11</span> Jahre</b><span>Personal Trainer seit 2015</span></div>
+        <div class="stat"><b>3 Orte</b><span>Studio · Outdoor · Zuhause</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="photo-frame" data-parallax>
+        <span class="tape t1"></span><span class="tape t2"></span>
+        <div data-reveal="img" style="--d:.2s;overflow:hidden"><img src="bilder/hero.webp" alt="Outdoor-Training auf der Wiese: Pascal Stempfle trainiert mit zwei Kunden" width="1600" height="1200"></div>
+        <span class="caption">Functional Training – draußen</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-wrap" aria-hidden="true"><div class="ticker">
+  <div class="ticker-track">
+    <span>Personal Training</span><span>Functional Training</span><span>Ernährung</span><span>Betriebssport</span><span>Outdoor</span><span>Zuhause</span><span>Firmenfitness</span>
+    <span>Personal Training</span><span>Functional Training</span><span>Ernährung</span><span>Betriebssport</span><span>Outdoor</span><span>Zuhause</span><span>Firmenfitness</span>
+  </div>
+</div></div>
+
+<!-- ================= KUNDENSTIMMEN ================= -->
+<section class="reviews-section" id="kundenstimmen">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="label"><span class="hand">Kundenstimmen</span><svg class="scribble draw" data-reveal-draw viewBox="0 0 140 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 40 3, 90 3, 138 6"/></svg></span>
+        <h2 data-reveal>Was meine <span class="mark" data-mark>Kunden</span> sagen</h2>
+      </div>
+      <p class="aside" data-reveal style="--d:.15s">Echte Menschen, echte Fortschritte. So erleben meine Kundinnen und Kunden das Training mit mir.</p>
+    </div>
+
+    <article class="feature-review">
+      <blockquote data-reveal>
+        <span class="bigq" aria-hidden="true">“</span>
+        <p>Durch Pascal ist Sport für uns einfach nicht mehr wegzudenken. Und der Spaß kommt bei ihm nie zu kurz. Ohne ihn wären wir heute nicht so <span class="mark" data-mark>fit!</span></p>
+        <div class="sig"><span class="hand">Brent &amp; Maike Wagner</span><small>Personal Training</small></div>
+      </blockquote>
+      <figure class="polaroid" data-reveal="drop" style="margin:0;--d:.2s">
+        <span class="tape"></span>
+        <img src="bilder/k1.webp" alt="Brent und Maike Wagner mit Pascal Stempfle beim Outdoor-Training" loading="lazy">
+        <figcaption class="cap">Brent, Pascal &amp; Maike</figcaption>
+      </figure>
+    </article>
+
+    <div class="review-grid">
+      <article class="review">
+        <figure class="polaroid" data-reveal="drop" style="margin:0"><span class="tape"></span><img src="bilder/k2.webp" alt="Nicole Fangmann mit Pascal Stempfle" loading="lazy"><figcaption class="cap">Nicole</figcaption></figure>
+        <blockquote data-reveal style="--d:.15s">
+          <p>Pascal ist immer gut vorbereitet und ändert das Training regelmäßig. Er konzentriert sich auf deine individuellen Bedürfnisse. Beim Thema Ernährung ist er der beste Ansprechpartner, den man sich wünschen kann.</p>
+          <div class="sig"><span class="hand">Nicole Fangmann</span><small>Training &amp; Ernährung</small></div>
+        </blockquote>
+      </article>
+      <article class="review">
+        <figure class="polaroid" data-reveal="drop" style="margin:0;--d:.1s"><span class="tape"></span><img src="bilder/k3.webp" alt="Robert Lemme mit Pascal Stempfle" loading="lazy"><figcaption class="cap">Robert</figcaption></figure>
+        <blockquote data-reveal style="--d:.25s">
+          <p>Er fordert, aber überfordert nicht. Pascal ist Motivator und Antreiber zugleich! Das Training vergeht immer wie im Flug, auch wenn ich manchmal frage, wann die Übung endlich vorbei ist.</p>
+          <div class="sig"><span class="hand">Robert Lemme</span><a href="https://www.lws-steuerberater.de/home/" target="_blank" rel="noopener">Zur Homepage von Robert ↗</a></div>
+        </blockquote>
+      </article>
+      <article class="review">
+        <figure class="polaroid" data-reveal="drop" style="margin:0"><span class="tape"></span><img src="bilder/k4.webp" alt="Dr. Stefan Bußmann mit Pascal Stempfle" loading="lazy"><figcaption class="cap">Stefan</figcaption></figure>
+        <blockquote data-reveal style="--d:.15s">
+          <p>Pascal beherrscht es meisterhaft, dich dort abzuholen, wo du gerade stehst.</p>
+          <div class="sig"><span class="hand">Dr. Stefan Bußmann</span><small>Personal Training</small></div>
+        </blockquote>
+      </article>
+      <article class="review">
+        <figure class="polaroid" data-reveal="drop" style="margin:0;--d:.1s"><span class="tape"></span><img src="bilder/k5.webp" alt="Marco Zander mit Pascal Stempfle im Studio" loading="lazy"><figcaption class="cap">Marco</figcaption></figure>
+        <blockquote data-reveal style="--d:.25s">
+          <p>Pascal schafft es, dich jederzeit zu motivieren. Selbst nach einem langen Arbeitstag holt er noch das Maximum aus dir raus.</p>
+          <div class="sig"><span class="hand">Marco Zander</span><small>Training nach Feierabend</small></div>
+        </blockquote>
+      </article>
+    </div>
+
+    <div class="reviews-cta" data-reveal>
+      <span class="hand">Du bist der Nächste?</span>
+      <svg class="arrow draw" data-reveal-draw style="--d:.3s" viewBox="0 0 64 40" aria-hidden="true"><path pathLength="1" d="M4 30 C 20 6, 40 6, 58 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path pathLength="1" d="M47 18 L58 20 L55 9" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <a class="btn" href="#kontakt">Probestunde vereinbaren</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ÜBER MICH ================= -->
+<section class="about" id="ueber-mich">
+  <div class="wrap about-grid">
+    <div class="about-photo">
+      <figure class="polaroid" data-reveal="drop" style="margin:0">
+        <span class="tape"></span>
+        <img src="bilder/pascal.webp" alt="Pascal Stempfle mit Sling-Trainer und Kettlebell im Garten" loading="lazy">
+        <figcaption class="cap">Pascal Stempfle</figcaption>
+      </figure>
+      <div class="note" aria-hidden="true" data-reveal style="--d:.6s">
+        <span class="hand">Das bin ich!</span>
+        <svg class="draw" data-reveal-draw style="--d:.8s" viewBox="0 0 50 54"><path pathLength="1" d="M40 4 C 30 18, 18 30, 10 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path pathLength="1" d="M6 36 L10 48 L21 42" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="since" data-reveal style="--d:.4s"><span>Personal Trainer seit</span><b>2015</b></div>
+    </div>
+    <div class="about-copy">
+      <span class="label"><span class="hand">Über mich</span><svg class="scribble draw" data-reveal-draw viewBox="0 0 140 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 40 3, 90 3, 138 6"/></svg></span>
+      <h2 data-reveal>Sieh nicht die ganze Treppe, nimm nur die <span class="mark" data-mark>erste Stufe!</span></h2>
+      <p data-reveal>Manchmal scheinen unsere Ziele so weit entfernt, dass es schon wieder demotivierend sein kann. Das Geheimnis dabei ist, dass du jeden Tag einen kleinen Schritt gehst.</p>
+      <p data-reveal>Und genau dabei möchte ich dir zur Seite stehen. Seit 2015 bin ich Personal Trainer und durfte schon vielen Menschen auf ihrem Weg zu einem neuen Körpergefühl helfen. Mit einer einfachen, aber sehr wirksamen Philosophie:</p>
+      <div class="motto" data-reveal>
+        <span class="hand">Meine Philosophie</span>
+        <strong>Du bist dein eigenes Fitnessstudio!</strong>
+        <p>Um fit zu sein und den mitunter anspruchsvollen Alltag zu meistern, brauchst du nicht mehr als dich und deinen Körper. Mit funktionellen Übungen, die vom Nacken bis zu den Waden jeden Muskel ansprechen.</p>
+      </div>
+      <p data-reveal>Neben dem sportlichen Aspekt ist jedoch ein anderer Baustein mindestens genau so wichtig: <span class="mark" data-mark><b>Der Spaß!</b></span> :)</p>
+      <a class="video-link" data-reveal href="https://www.youtube.com/watch?v=kKQ2nRK7Dn0" target="_blank" rel="noopener">
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        <span><b>Dazu hier ein paar Worte im Video</b><span>Öffnet YouTube in einem neuen Tab</span></span>
+      </a>
+      <p class="creed" data-reveal>Sport ist kein Zeitvertreib oder ein Hobby. Sport ist eine Lebenseinstellung.</p>
+      <p data-reveal>Dabei spielt es (fast) keine Rolle, ob du Fußball spielst, dich zuhause mit Liegestützen fit hältst oder zwei Mal die Woche auf den Tennisplatz gehst. Sport ist ein wesentlicher Bestandteil des Glücks, davon bin ich überzeugt!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PERSONAL TRAINING ================= -->
+<section class="pt" id="personal-training">
+  <div class="wrap">
+    <div class="pt-intro">
+      <div>
+        <span class="label"><span class="hand">Personal Training</span><svg class="scribble draw" data-reveal-draw viewBox="0 0 140 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 40 3, 90 3, 138 6"/></svg></span>
+        <h2 data-reveal>Dein Training.<br>Deine Ziele.</h2>
+      </div>
+      <blockquote data-reveal style="--d:.2s">„Das beste Projekt, an dem du je arbeiten wirst, bist DU!“</blockquote>
+    </div>
+
+    <div class="pt-grid">
+      <div class="pt-copy">
+        <ul class="checklist" data-reveal>
+          <li><svg class="draw" data-reveal-draw style="--d:.2s" viewBox="0 0 26 26" aria-hidden="true"><rect class="box" pathLength="1" x="2" y="2" width="22" height="22"/><path class="tick" pathLength="1" d="M6 13 L11 19 L21 5"/></svg>Du bist motiviert, deinem Körper etwas Gutes zu tun, weißt aber nicht wie?</li>
+          <li><svg class="draw" data-reveal-draw style="--d:.4s" viewBox="0 0 26 26" aria-hidden="true"><rect class="box" pathLength="1" x="2" y="2" width="22" height="22"/><path class="tick" pathLength="1" d="M6 13 L11 19 L21 5"/></svg>Du machst kaum Fortschritte in deinem eigenen Training?</li>
+          <li><svg class="draw" data-reveal-draw style="--d:.6s" viewBox="0 0 26 26" aria-hidden="true"><rect class="box" pathLength="1" x="2" y="2" width="22" height="22"/><path class="tick" pathLength="1" d="M6 13 L11 19 L21 5"/></svg>Du hast Probleme bei der Umsetzung deiner Ernährung?</li>
+          <li><svg class="draw" data-reveal-draw style="--d:.8s" viewBox="0 0 26 26" aria-hidden="true"><rect class="box" pathLength="1" x="2" y="2" width="22" height="22"/><path class="tick" pathLength="1" d="M6 13 L11 19 L21 5"/></svg>Ausreden erfinden, um Sport oder gesunde Ernährung zu verschieben, fällt dir leicht, ärgert dich aber im Endeffekt?</li>
+        </ul>
+        <p class="answer" data-reveal>Ich hole dich genau dort ab.<svg class="scribble draw" data-reveal-draw style="--d:.4s" viewBox="0 0 300 62" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M160 5 C 70 2, 8 12, 6 30 C 4 50, 90 59, 170 57 C 250 55, 297 42, 294 24 C 290 6, 210 0, 120 7"/></svg></p>
+        <p data-reveal>Meine Aufgabe ist es, durch mein Wissen und meine Erfahrung auf deine Schwächen und Stärken einzugehen und dich so immer wieder neu zu motivieren.</p>
+        <p data-reveal>Ob die Trainingseinheiten im Fitnessstudio, im Outdoorbereich oder zuhause stattfinden, richtet sich ganz nach dir und deinen Zielen.</p>
+        <div class="places" data-reveal aria-label="Trainingsorte">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Fitnessstudio</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Outdoor</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg>Zuhause</span>
+        </div>
+      </div>
+      <div class="pt-photos">
+        <figure data-reveal="img"><img src="bilder/indoor.webp" alt="Functional Training im Studio mit Medizinball" loading="lazy"></figure>
+        <figure data-reveal="img" style="--d:.15s"><img src="bilder/pt1.webp" alt="Outdoor-Training im Garten vor einem Wohnhaus" loading="lazy"></figure>
+        <figure data-reveal="img" style="--d:.3s"><img src="bilder/pt2.webp" alt="Training auf dem Step-Board im Studio" loading="lazy"></figure>
+      </div>
+    </div>
+
+    <div class="functional" data-reveal>
+      <div>
+        <h3>Functional Training</h3>
+        <div class="vs"><span class="old">einzelne Muskeln<svg class="scribble draw" data-reveal-draw style="--d:.3s" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 6 C 30 3, 70 8, 98 4"/></svg></span><span class="new">→ ganze Bewegungen</span></div>
+        <p>Dabei spielt das Functional Training eine sehr große Rolle. Im Gegensatz zum klassischen Krafttraining, wie wir es aus Fitnessstudios kennen, liegt der Fokus im Functional Training auf dem Ausführen von ganzheitlichen Bewegungen statt dem Training einzelner Muskelgruppen.</p>
+      </div>
+      <div>
+        <h3>Frei statt Maschine</h3>
+        <div class="vs"><span class="old">Isolation<svg class="scribble draw" data-reveal-draw style="--d:.5s" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 6 C 30 3, 70 8, 98 4"/></svg></span><span class="new">→ mehrgelenkig</span></div>
+        <p>In der Praxis bedeutet dies eine Abkehr von Isolations- und Maschinentraining zu freiem, mehrgelenkigem und multidimensionalem Training. Selbst Fitness-Center sind vollgepackt mit Maschinen und High-Tech-Equipment, die nicht für unseren Alltag ausgelegt sind, sondern für isoliertes Training einzelner Muskelgruppen.</p>
+      </div>
+      <div>
+        <h3>Fit für den Alltag</h3>
+        <div class="vs"><span class="old">Bewegungsmangel<svg class="scribble draw" data-reveal-draw style="--d:.7s" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 6 C 30 3, 70 8, 98 4"/></svg></span><span class="new">→ Funktion</span></div>
+        <p>Die zunehmende Technisierung unserer Gesellschaft bewirkt extreme Einschränkungen für unseren Körper und seine Funktionen. Functional Training beinhaltet Bewegungen, die bzgl. Mechanik, Koordination und Energiebereitstellung den Anforderungen des Alltages oder sportspezifischen Bewegungen entsprechen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FIRMENFITNESS ================= -->
+<section class="biz" id="firmenfitness">
+  <div class="wrap">
+    <div class="biz-head">
+      <div>
+        <span class="label"><span class="hand">Betriebssport &amp; Firmenfitness</span><svg class="scribble draw" data-reveal-draw viewBox="0 0 140 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 40 3, 90 3, 138 6"/></svg></span>
+        <h2 data-reveal>Was ist wichtiger als die Gesundheit Ihrer Mitarbeiter?</h2>
+        <p data-reveal>Über die positiven Auswirkungen von Betriebssport könnte man Bände füllen. Die meines Erachtens nach fünf wichtigsten und nachhaltigsten davon sind:</p>
+      </div>
+      <div class="biz-img" data-reveal="img"><img src="bilder/bs1.webp" alt="Betriebssport-Gruppe beim Outdoor-Training im Park" width="1400" height="786" decoding="async"></div>
+    </div>
+
+    <ol class="benefits">
+      <li data-reveal>
+        <h3>Gesundheit &amp; Leistungs&shy;fähigkeit<small>Sport macht den Kopf frei.</small></h3>
+        <div class="txt">
+          <p>Die Anforderungen im Arbeitsleben werden immer komplexer sowie fordernder. Betriebssport beugt Muskel-Skelett- und Herz-Kreislauf-Erkrankungen vor und stärkt die Körperwahrnehmung.</p>
+          <p>Und wer einmal seinen „inneren Schweinehund“ überwunden hat und nach der Arbeit zum Sport gegangen ist, weiß, wie gut es sich anfühlt. Man lernt also auch, sich langfristige Ziele zu setzen und diese in kleinen Schritten zu realisieren. Sport macht den Kopf frei. Dies führt dazu, dass man sich besser bei der Arbeit konzentrieren kann und demnach leistungsfähiger ist.</p>
+        </div>
+      </li>
+      <li data-reveal>
+        <h3>Teamgeist<small>Zusammen schwitzen schweißt zusammen.</small></h3>
+        <div class="txt">
+          <p>Gemeinsame Erfahrungen stärken das Wir-Gefühl im Team: Betriebssport bietet einen Raum, in dem sich Mitarbeiter in einem ungezwungenen Kontext ohne Druck besser kennenlernen können. Ganz nach dem Motto: Zusammen schwitzen schweißt zusammen. Und im Team kann man sich viel besser motivieren.</p>
+        </div>
+      </li>
+      <li data-reveal>
+        <h3>Stressabbau<small>Glückshormone statt Anspannung.</small></h3>
+        <div class="txt">
+          <p>Im Job werden wir gefördert, aber auch durch immer neue Herausforderungen gefordert: Wir nehmen viele Reize wahr, die unseren Organismus in Aufmerksamkeit versetzen. Das ist gut und notwendig, um konzentriert zu arbeiten, aber genauso essentiell ist es, dass der Körper lernt, abzuschalten und Druck und Anspannung abzubauen.</p>
+          <p>Sport ist da absolut unerlässlich. Er sorgt dafür, dass „Glückshormone“ freigesetzt werden, die dafür sorgen, dass wir entspannt und zufrieden sind. Außerdem steigern diese die Konzentrations- und Aufnahmefähigkeit. Berufliche Anforderungen können leichter bewältigt werden.</p>
+        </div>
+      </li>
+      <li data-reveal>
+        <h3>Work-Life-Balance<small>Sport als fester Termin im Alltag.</small></h3>
+        <div class="txt">
+          <p>Betriebssport ist bequem, da die Mitarbeiter sich nicht mehr um die Organisation einer Sportgruppe, den Zutritt zum Verein etc. in ihrer Freizeit kümmern müssen. Auch werden die Kosten meist vom Betrieb übernommen oder bezuschusst.</p>
+          <p>Wenn Sie den Sport an einem Ort in der Nähe des Büros vor oder nach der Arbeit durchführen, entfallen zudem lange Anfahrtswege. Ein zeitnaher Termin vor oder nach der Arbeit macht es den Mitarbeitern leichter, den Sport als festen Termin in ihren Alltag zu integrieren.</p>
+        </div>
+      </li>
+      <li data-reveal>
+        <h3>Firmenimage<small>Ein gutes Aushängeschild.</small></h3>
+        <div class="txt">
+          <p>Gerade junge Mitarbeiter haben hohe Ansprüche an ihren Arbeitgeber. Neben individuellen Entwicklungsmöglichkeiten machen auch „Teamevents“ das Unternehmen attraktiv. Firmen, die auf ihrer Webseite kommunizieren, dass sie Betriebssport anbieten, werden von Bewerbern als besonders attraktiv empfunden.</p>
+          <p>Betriebssport ist somit ein gutes Aushängeschild für das Unternehmen und stärkt die Corporate Identity.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="clients">
+      <div class="clients-head"><h3 data-reveal>Zu den aktuellen Firmenkunden gehören u.&nbsp;a.:</h3></div>
+      <div class="client-grid">
+        <a class="client" data-reveal href="http://www.heimstatt-clemens-august.de" target="_blank" rel="noopener">
+          <div class="pic contain"><img src="bilder/l1.webp" alt="Logo Heimstatt Clemens-August"></div>
+          <div class="meta"><b>Heimstatt-Clemens-August Neunkirchen</b><span>Zur Homepage ↗</span></div>
+        </a>
+        <a class="client" data-reveal style="--d:.1s" href="http://www.haus-st-marien-belm.de" target="_blank" rel="noopener">
+          <div class="pic contain"><img src="bilder/l2.webp" alt="Logo Pflegeeinrichtung Haus St. Marien"></div>
+          <div class="meta"><b>Haus St. Marien Belm</b><span>Zur Homepage ↗</span></div>
+        </a>
+        <a class="client" data-reveal style="--d:.2s" href="https://www.marienheime.de/haus-st-josef" target="_blank" rel="noopener">
+          <div class="pic"><img src="bilder/l3.webp" alt="Gartenanlage des Alten- und Pflegeheims St. Josef"></div>
+          <div class="meta"><b>Alten- und Pflegeheim St. Josef Wallenhorst</b><span>Zur Homepage ↗</span></div>
+        </a>
+        <a class="client" data-reveal style="--d:.3s" href="https://www.diakonie-os.de/angebote/senioren/stationaere-einrichtungen/haus-schinkel.html/" target="_blank" rel="noopener">
+          <div class="pic"><img src="bilder/l4.webp" alt="Gebäude und Garten von Haus Schinkel"></div>
+          <div class="meta"><b>Haus Schinkel Osnabrück</b><span>Zur Homepage ↗</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KONTAKT ================= -->
+<section class="contact" id="kontakt">
+  <div class="wrap contact-grid">
+    <div class="contact-copy">
+      <span class="label"><span class="hand">Kontakt</span><svg class="scribble draw" data-reveal-draw viewBox="0 0 140 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C 40 3, 90 3, 138 6"/></svg></span>
+      <h2 data-reveal>Deine <span class="mark" data-mark>kostenlose</span> Probestunde</h2>
+      <p data-reveal>Vereinbare jetzt deine kostenlose Probestunde mit mir und wir schauen gemeinsam, wohin unser Weg geht! So viel kann ich dir jetzt schon mal versprechen:</p>
+      <div class="promise" data-reveal style="--d:.2s">
+        <span class="hand">Es wird sich lohnen! :)</span>
+        <svg class="draw" data-reveal-draw style="--d:.6s" viewBox="0 0 84 60" aria-hidden="true"><path pathLength="1" d="M4 20 C 30 4, 60 12, 76 44" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path pathLength="1" d="M64 38 L76 44 L80 31" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <div class="contact-card" data-reveal style="--d:.15s">
+      <div class="ci">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
+        <div><small>Telefon</small><a href="tel:+4917663600587">0176 63600587</a></div>
+        <button class="copy" data-copy="0176 63600587" type="button">Kopieren</button>
+      </div>
+      <div class="ci">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="1"/><path d="M22 6l-10 7L2 6"/></svg></span>
+        <div><small>E-Mail</small><a href="mailto:info@der-sports-freund.de">info@der-sports-freund.de</a></div>
+        <button class="copy" data-copy="info@der-sports-freund.de" type="button">Kopieren</button>
+      </div>
+      <div class="ci">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <div><small>Adresse</small><address>Pascal Stempfle<br>Repkamp 16, 49593 Bersenbrück</address></div>
+        <span></span>
+      </div>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Repkamp+16,+49593+Bersenbr%C3%BCck" target="_blank" rel="noopener">Route planen<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      <p class="map-note">Die Karte öffnet sich bei Google Maps in einem neuen Tab. Beim Besuch dieser Seite werden keine Daten an Google übertragen.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" id="foot-logo" href="#start" aria-label="Der Sportsfreund – zum Seitenanfang" style="color:var(--night-fg)">
+          <svg viewBox="0 0 250 46" aria-hidden="true">
+            <path class="k-handle" pathLength="1" d="M13 20 V14 a7 7 0 0 1 14 0 V20"/>
+            <circle class="k-body" pathLength="1" cx="20" cy="29" r="12"/>
+            <circle class="k-fill" cx="20" cy="29" r="6.5"/>
+            <text class="w-der" x="44" y="16">der</text>
+            <text class="w-main" x="44" y="40">SPORTS<tspan>FREUND</tspan></text>
+          </svg>
+        </a>
+        <address><b>Pascal Stempfle</b><br>Repkamp 16<br>49593 Bersenbrück<br><span style="user-select:all">info@der-sports-freund.de</span></address>
+      </div>
+      <div>
+        <h4>Auf dieser Seite</h4>
+        <ul>
+          <li><a href="#kundenstimmen">Kundenstimmen</a></li>
+          <li><a href="#ueber-mich">Über mich</a></li>
+          <li><a href="#personal-training">Personal Training</a></li>
+          <li><a href="#firmenfitness">Betriebssport/Firmenfitness</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><button type="button" data-open="dlg-impressum">Impressum</button></li>
+          <li><button type="button" data-open="dlg-datenschutz">Datenschutz</button></li>
+          <li><button type="button" data-cookie-settings>Cookie-Einstellungen</button></li>
+          <li><button type="button" data-open="dlg-widerruf">Vertrag widerrufen</button></li>
+          <li><button type="button" data-open="dlg-cookie">Cookie-Richtlinie</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyline"><span>© <span id="year">2026</span> Der Sportsfreund · Pascal Stempfle</span><a href="#start" style="color:inherit;text-decoration:none">Nach oben ↑</a></div>
+  </div>
+</footer>
+
+<!-- ================= RECHTSTEXTE ================= -->
+<dialog class="legal" id="dlg-impressum" aria-labelledby="h-imp">
+  <div class="legal-head"><h2 id="h-imp">Impressum</h2><button class="xbtn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="legal-body">
+    <p><b>Pascal Stempfle – Der Sportsfreund</b><br>Repkamp 16<br>49593 Bersenbrück</p>
+    <h3>Kontakt</h3>
+    <p>Telefon: 0176 63600587<br>E-Mail: info@der-sports-freund.de</p>
+  </div>
+</dialog>
+
+<dialog class="legal" id="dlg-datenschutz" aria-labelledby="h-ds">
+  <div class="legal-head"><h2 id="h-ds">Datenschutzerklärung</h2><button class="xbtn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="legal-body">
+    <p>Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google“). Google Analytics verwendet sog. „Cookies“, Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
+    <p>Im Falle der Aktivierung der IP-Anonymisierung auf dieser Website wird Ihre IP-Adresse von Google jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten, um Reports über die Websiteaktivitäten zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen gegenüber dem Websitebetreiber zu erbringen. Die im Rahmen von Google Analytics von Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von Google zusammengeführt. Sie können die Speicherung der Cookies durch eine entsprechende Einstellung Ihrer Browser-Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website vollumfänglich werden nutzen können. Sie können darüber hinaus die Erfassung der durch das Cookie erzeugten und auf Ihre Nutzung der Website bezogenen Daten (inkl. Ihrer IP-Adresse) an Google sowie die Verarbeitung dieser Daten durch Google verhindern, indem sie das unter dem folgenden Link verfügbare Browser-Plugin herunterladen und installieren: <a href="http://tools.google.com/dlpage/gaoptout?hl=de" target="_blank" rel="noopener">http://tools.google.com/dlpage/gaoptout?hl=de</a>.</p>
+    <p>Sie können die Erfassung durch Google Analytics verhindern, indem Sie in den <button type="button" class="inline-btn" data-cookie-settings>Cookie-Einstellungen</button> die Kategorie „Performance“ deaktivieren. Es wird ein Opt-Out gespeichert, der die zukünftige Erfassung Ihrer Daten beim Besuch dieser Website verhindert.</p>
+    <p>Nähere Informationen zu Nutzungsbedingungen und Datenschutz finden Sie unter den Google Analytics Bedingungen bzw. unter der Google Analytics Übersicht. Wir weisen Sie darauf hin, dass auf dieser Website Google Analytics um den Code „gat._anonymizeIp();“ erweitert wurde, um eine anonymisierte Erfassung von IP-Adressen (sog. IP-Masking) zu gewährleisten.</p>
+  </div>
+</dialog>
+
+<dialog class="legal" id="dlg-widerruf" aria-labelledby="h-wr">
+  <div class="legal-head"><h2 id="h-wr">Vertrag widerrufen</h2><button class="xbtn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="legal-body">
+    <p>Du möchtest einen mit „Der Sportsfreund“ geschlossenen Vertrag widerrufen? Dann sende uns bitte eine eindeutige Erklärung per E-Mail oder Post.</p>
+    <p><b>Pascal Stempfle – Der Sportsfreund</b><br>Repkamp 16, 49593 Bersenbrück<br>E-Mail: info@der-sports-freund.de</p>
+    <h3>Bitte gib dabei an</h3>
+    <ul>
+      <li>deinen Vor- und Nachnamen und deine Anschrift,</li>
+      <li>welchen Vertrag bzw. welche Leistung du widerrufen möchtest,</li>
+      <li>das Datum des Vertragsschlusses.</li>
+    </ul>
+    <p>Du erhältst anschließend eine Bestätigung über den Eingang deines Widerrufs.</p>
+  </div>
+</dialog>
+
+<dialog class="legal" id="dlg-cookie" aria-labelledby="h-cr">
+  <div class="legal-head"><h2 id="h-cr">Cookie-Richtlinie</h2><button class="xbtn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="legal-body">
+    <p>Cookies werden zur Benutzerführung und Webanalyse verwendet und helfen dabei, diese Website besser zu machen. Deine Auswahl kannst du jederzeit in den <button type="button" class="inline-btn" data-cookie-settings>Cookie-Einstellungen</button> ändern.</p>
+    <h3>Unbedingt erforderlich</h3>
+    <p>Unbedingt erforderliche Cookies ermöglichen grundlegende Funktionen und sind für die einwandfreie Funktion der Website erforderlich. Daher kann man sie nicht deaktivieren. Diese Art von Cookies wird ausschließlich vom Betreiber der Website verwendet (First-Party-Cookie), und sämtliche Informationen in den Cookies werden nur an diese Website gesendet. Dazu gehört auch das Speichern deiner Cookie-Auswahl.</p>
+    <h3>Funktionell</h3>
+    <p>Funktionelle Cookies ermöglichen es, Inhalte von Drittanbietern wie YouTube-Videos oder Google-Maps-Karten bereitzustellen. Auf dieser Seite werden diese Inhalte erst nach einem Klick in einem neuen Tab geöffnet.</p>
+    <h3>Performance</h3>
+    <p>Performance-Cookies sammeln Informationen darüber, wie unsere Website genutzt wird (z.&nbsp;B. mit Google Analytics). Sie helfen uns, die Website besser zu machen. Sie werden nur mit deiner Einwilligung gesetzt.</p>
+  </div>
+</dialog>
+
+<!-- ================= COOKIE-BANNER ================= -->
+<div class="cookie" id="cookie" hidden>
+  <div class="cookie-box" role="dialog" aria-modal="false" aria-labelledby="cookie-h">
+    <div class="cookie-top">
+      <h2 id="cookie-h">Cookie-Richtlinie</h2>
+      <button class="xbtn" type="button" id="cookie-x" aria-label="Schließen (nur erforderliche Cookies)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <p>Cookies werden zur Benutzerführung und Webanalyse verwendet und helfen dabei, diese Website besser zu machen. Wenn du diese Seite weiter benutzt, gehen wir davon aus, dass du mit unseren Datenschutzbestimmungen einverstanden bist: <button type="button" class="inline-btn" data-open="dlg-cookie">Cookie-Richtlinie</button></p>
+    <div class="cookie-links"><button type="button" data-open="dlg-impressum">Impressum</button><button type="button" data-open="dlg-datenschutz">Datenschutz</button></div>
+    <div class="cats">
+      <details class="cat">
+        <summary><span class="switch"><input type="checkbox" id="c-necessary" checked disabled aria-label="Unbedingt erforderlich"><i></i></span>Unbedingt erforderlich<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></summary>
+        <div class="desc">Ermöglichen grundlegende Funktionen und sind für die einwandfreie Funktion der Website erforderlich. Sie können nicht deaktiviert werden.<ul><li>Speicherung deiner Cookie-Auswahl</li></ul></div>
+      </details>
+      <details class="cat">
+        <summary><span class="switch"><input type="checkbox" id="c-functional" aria-label="Funktionell"><i></i></span>Funktionell<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></summary>
+        <div class="desc">Ermöglichen Inhalte von Drittanbietern.<ul><li>YouTube (Video)</li><li>Google Maps (Karte)</li></ul></div>
+      </details>
+      <details class="cat">
+        <summary><span class="switch"><input type="checkbox" id="c-performance" aria-label="Performance"><i></i></span>Performance<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></summary>
+        <div class="desc">Helfen uns zu verstehen, wie die Website genutzt wird.<ul><li>Google Analytics (mit IP-Anonymisierung)</li></ul></div>
+      </details>
+    </div>
+    <div class="cookie-btns">
+      <button type="button" class="all" id="c-all">Alle akzeptieren</button>
+      <button type="button" id="c-none">Alle ablehnen</button>
+      <button type="button" id="c-sel">Nur Auswahl akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canIO='IntersectionObserver' in window;
+  if(!reduce&&canIO) root.classList.add('motion');
+
+  /* ---- Scroll-Reveals ---- */
+  var targets=[].slice.call(document.querySelectorAll('[data-reveal],[data-reveal-draw],[data-mark]'));
+  function show(el){el.classList.add('in');}
+  if(root.classList.contains('motion')){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){show(e.target);io.unobserve(e.target);}});},{rootMargin:'0px 0px -12% 0px',threshold:.08});
+    targets.forEach(function(t){io.observe(t);});
+    // Sicherheitsnetz: was beim Laden schon sichtbar ist, sofort starten
+    requestAnimationFrame(function(){targets.forEach(function(t){var r=t.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)show(t);});});
+  } else { targets.forEach(show); }
+
+  /* ---- Footer-Logo zeichnet sich, wenn sichtbar ---- */
+  var fl=document.getElementById('foot-logo');
+  if(fl&&root.classList.contains('motion')){
+    var io2=new IntersectionObserver(function(es){if(es[0].isIntersecting){fl.classList.add('anim');io2.disconnect();}},{threshold:.6});io2.observe(fl);
+  }
+
+  /* ---- Zähler ---- */
+  document.querySelectorAll('[data-count]').forEach(function(el){
+    var end=new Date().getFullYear()-2015; el.textContent=end;
+    if(!root.classList.contains('motion'))return;
+    el.textContent='0';
+    setTimeout(function(){var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/1400);el.textContent=Math.round(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);},1200);
+  });
+
+  /* ---- Rotierende Kurzzitate im Hero ---- */
+  var quotes=[["Er fordert, aber überfordert nicht.","Robert Lemme"],["Ohne ihn wären wir heute nicht so fit!","Brent & Maike Wagner"],["Pascal beherrscht es meisterhaft, dich dort abzuholen, wo du gerade stehst.","Dr. Stefan Bußmann"],["Beim Thema Ernährung ist er der beste Ansprechpartner.","Nicole Fangmann"],["Selbst nach einem langen Arbeitstag holt er noch das Maximum aus dir raus.","Marco Zander"]];
+  var qr=document.getElementById('qr'),qi=0;
+  if(qr&&!reduce){setInterval(function(){qr.classList.add('out');setTimeout(function(){qi=(qi+1)%quotes.length;qr.querySelector('q').textContent=quotes[qi][0];qr.querySelector('cite').textContent=quotes[qi][1];qr.classList.remove('out');},500);},5200);}
+
+  /* ---- Parallax Hero-Foto + Header-Schatten ---- */
+  var px=document.querySelector('[data-parallax]'),hdr=document.querySelector('.site-header'),ticking=false;
+  function onScroll(){var y=window.scrollY;hdr.classList.toggle('scrolled',y>10);if(px&&!reduce&&y<900){px.style.transform='rotate(2.2deg) translateY('+(y*0.12)+'px)';}ticking=false;}
+  addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(onScroll);ticking=true;}},{passive:true});
+
+  /* ---- Menü ---- */
+  var burger=document.getElementById('burger'),menu=document.getElementById('menu');
+  burger.addEventListener('click',function(){var o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o);burger.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});
+  menu.addEventListener('click',function(e){if(e.target.closest('a')){menu.classList.remove('open');burger.setAttribute('aria-expanded','false');}});
+  var links=[].slice.call(menu.querySelectorAll('a'));
+  if(canIO){var io3=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id)});}});},{rootMargin:'-45% 0px -50% 0px'});
+    ['start','kundenstimmen','ueber-mich','personal-training','firmenfitness','kontakt'].forEach(function(id){var s=document.getElementById(id);if(s)io3.observe(s);});}
+
+  /* ---- Toast & Kopieren ---- */
+  var toast=document.getElementById('toast'),tt;
+  function say(t){toast.textContent=t;toast.hidden=false;clearTimeout(tt);tt=setTimeout(function(){toast.hidden=true},2200);}
+  document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){
+    var v=b.getAttribute('data-copy');
+    var fb=function(){var t=b.parentNode.querySelector('a');var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r);say('Markiert – jetzt kopieren');};
+    try{navigator.clipboard.writeText(v).then(function(){say('Kopiert: '+v)},fb);}catch(e){fb();}
+  });});
+
+  /* ---- Dialoge ---- */
+  document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){var d=document.getElementById(b.getAttribute('data-open'));if(!d)return;if(d.showModal)d.showModal();else d.setAttribute('open','');});});
+  document.querySelectorAll('dialog').forEach(function(d){d.addEventListener('click',function(e){if(e.target===d)d.close();});d.querySelectorAll('[data-close]').forEach(function(x){x.addEventListener('click',function(){d.close()});});});
+
+  /* ---- Cookie-Banner ---- */
+  var KEY='sportsfreund-cookies-v1',box=document.getElementById('cookie');
+  var cf=document.getElementById('c-functional'),cp=document.getElementById('c-performance');
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return null}}
+  function applyConsent(c){ if(c.performance){ /* Hier ggf. Google Analytics laden – wird nur mit Einwilligung ausgeführt */ } }
+  function save(f,p,label){var c={necessary:true,functional:!!f,performance:!!p,date:new Date().toISOString()};try{localStorage.setItem(KEY,JSON.stringify(c))}catch(e){}window.cookieConsent=c;box.hidden=true;say(label);applyConsent(c);}
+  function openSettings(){var c=load();cf.checked=!!(c&&c.functional);cp.checked=!!(c&&c.performance);document.querySelectorAll('dialog[open]').forEach(function(d){d.close()});box.hidden=false;}
+  document.getElementById('c-all').addEventListener('click',function(){save(true,true,'Alle Cookies akzeptiert')});
+  document.getElementById('c-none').addEventListener('click',function(){save(false,false,'Nur erforderliche Cookies aktiv')});
+  document.getElementById('c-sel').addEventListener('click',function(){save(cf.checked,cp.checked,'Auswahl gespeichert')});
+  document.getElementById('cookie-x').addEventListener('click',function(){save(false,false,'Nur erforderliche Cookies aktiv')});
+  document.querySelectorAll('[data-cookie-settings]').forEach(function(b){b.addEventListener('click',openSettings)});
+  var c0=load(); if(c0){window.cookieConsent=c0;applyConsent(c0);} else {setTimeout(function(){box.hidden=false;},900);}
+
+  var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
