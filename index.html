@@ -322,13 +322,14 @@ section{padding-block:clamp(72px,10vw,128px);position:relative}
 
 /* ---------- Kontakt ---------- */
 .contact{padding-bottom:clamp(80px,10vw,128px)}
-.contact-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,80px);align-items:start}
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;grid-template-areas:"copy form" "card form";grid-template-rows:auto 1fr;gap:clamp(32px,4vw,48px) clamp(32px,6vw,80px);align-items:start}
+.contact-copy{grid-area:copy}.contact-card{grid-area:card}.contact-form{grid-area:form}
 .contact-copy{display:flex;flex-direction:column;gap:1.3rem;min-width:0}
 .contact-copy p{font-size:1.15rem;max-width:46ch;color:var(--ink-2)}
 .promise{position:relative;align-self:flex-start;margin-top:.6rem}
 .promise .hand{font-size:clamp(2rem,3.6vw,2.8rem);color:var(--ink);transform:rotate(-3deg);display:block}
 .promise svg{position:absolute;right:-90px;top:10px;width:84px;height:60px;color:var(--blue)}
-.contact-card{background:var(--sheet);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--blue);padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:0;min-width:0}
+.contact-card{background:var(--sheet);border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:0;min-width:0}
 .ci{display:grid;grid-template-columns:44px 1fr auto;gap:1rem;align-items:center;padding-block:1rem}
 .ci + .ci{border-top:1px dashed var(--rule)}
 .ci .ic{width:44px;height:44px;background:var(--ink);color:#fff;display:grid;place-items:center}
@@ -340,7 +341,7 @@ section{padding-block:clamp(72px,10vw,128px);position:relative}
 .copy:hover{background:var(--ink);color:#fff}
 .contact-card .btn{margin-top:1.2rem;align-self:flex-start}
 .map-note{margin-top:1rem;font-size:.85rem;color:var(--ink-2)}
-@media (max-width:900px){.contact-grid{grid-template-columns:1fr}.promise svg{display:none}}
+@media (max-width:900px){.contact-grid{grid-template-columns:1fr;grid-template-areas:"copy" "form" "card"}.promise svg{display:none}}
 
 /* ---------- Footer ---------- */
 footer{background:var(--night);color:var(--night-muted);padding-block:clamp(56px,7vw,80px) 28px;font-size:.95rem}
@@ -402,6 +403,48 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
 .cookie-btns .all{grid-column:span 2;background:var(--blue);border-color:var(--blue);color:#fff}
 .cookie-btns .all:hover{background:var(--ink);border-color:var(--ink)}
 .toast{white-space:nowrap;position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:.6rem 1.1rem;font-weight:600;font-size:.9rem;z-index:90}
+
+/* Kontaktformular */
+.contact-form{position:relative;background:var(--sheet);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--blue);min-width:0}
+.cf-head{background:var(--ink);color:#fff;padding:clamp(18px,2.6vw,26px) clamp(20px,3vw,32px) 1rem}
+.cf-head h3{font-size:clamp(1.9rem,3vw,2.4rem);line-height:1}
+.cf-promise{display:flex;align-items:center;gap:.6rem;margin:.4rem 0 0}
+.cf-promise svg{flex:0 0 28px;width:28px;height:28px;fill:none;stroke:var(--marker);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.cf-promise .hand{color:var(--marker);font-size:1.5rem;line-height:1.1}
+.cf-body{padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:1.1rem}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cf-plz{grid-template-columns:7.5rem 1fr}
+.fld{display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.fld > span,.chips legend{font-size:.76rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-2);font-weight:600}
+.contact-form input:not([type=radio]):not([type=checkbox]),.contact-form textarea{width:100%;font:500 1rem/1.4 var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;padding:.7rem .8rem;transition:box-shadow .2s,background .2s;-webkit-appearance:none;appearance:none}
+.contact-form textarea{resize:vertical;min-height:8.5rem;background-image:linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% 1.4em;background-position:0 calc(.7rem + 1.35em);background-attachment:local}
+.contact-form ::placeholder{color:#8a93a3}
+.contact-form input:focus,.contact-form textarea:focus{outline:0;background-color:#fff;box-shadow:4px 4px 0 var(--blue)}
+.contact-form .was-checked :invalid{border-color:#d33c3c;box-shadow:4px 4px 0 rgba(211,60,60,.35)}
+.chips{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.chips legend{padding:0;margin-bottom:.55rem}
+.chips label{position:relative;cursor:pointer}
+.chips input[type=radio]{position:absolute;opacity:0;width:1px;height:1px}
+.chips label span{display:inline-block;padding:.45rem .9rem;border:2px solid var(--ink);font-weight:600;font-size:.92rem;transition:background .2s,color .2s,transform .2s var(--ease)}
+.chips label:hover span{transform:translateY(-2px)}
+.chips input:checked + span{background:var(--ink);color:#fff;transform:rotate(-1.5deg)}
+.chips input:focus-visible + span{box-shadow:3px 3px 0 var(--blue)}
+.cf-other{margin-top:.15rem}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.consent{display:grid;grid-template-columns:22px 1fr;gap:.7rem;align-items:start;font-size:.9rem;color:var(--ink-2);cursor:pointer}
+.consent input{width:22px;height:22px;margin:0;accent-color:var(--blue);cursor:pointer}
+.consent .inline-btn{color:var(--blue)}
+.cf-send{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.2rem;margin-top:.2rem}
+.cf-send small{color:var(--ink-2);font-size:.82rem}
+.contact-form .btn[disabled]{opacity:.6;cursor:wait}
+.cf-msg{margin:0;padding:.7rem .9rem;border-left:4px solid #d33c3c;background:#fdf0ef;font-size:.95rem}
+.cf-done{padding:clamp(32px,5vw,56px) clamp(20px,3vw,32px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:.8rem}
+.cf-done svg{width:110px;height:110px;fill:none;stroke:var(--blue);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.cf-done h3{font-size:clamp(2rem,3.4vw,2.6rem)}
+.cf-done p{margin:0;font-size:1.12rem;max-width:34ch;color:var(--ink-2)}
+.cf-done .hand{font-size:1.9rem;color:var(--blue);transform:rotate(-3deg)}
+.cf-done[hidden],.cf-body[hidden]{display:none}
+@media (max-width:480px){.cf-row{grid-template-columns:1fr}.cf-plz{grid-template-columns:6.5rem 1fr}}
 
 /* ================= MOTION ================= */
 /* Ohne JavaScript oder bei „Bewegung reduzieren“ ist alles sofort sichtbar. */
@@ -784,6 +827,56 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
         <svg class="draw" data-reveal-draw style="--d:.6s" viewBox="0 0 84 60" aria-hidden="true"><path pathLength="1" d="M4 20 C 30 4, 60 12, 76 44" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path pathLength="1" d="M64 38 L76 44 L80 31" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
+    <form class="contact-form" id="probe-form" action="kontakt.php" method="post" data-reveal style="--d:.1s" novalidate>
+      <div class="cf-head">
+        <h3>Probestunde anfragen</h3>
+        <p class="cf-promise"><svg class="draw" data-reveal-draw style="--d:.5s" viewBox="0 0 32 32" aria-hidden="true"><circle pathLength="1" cx="16" cy="16" r="13"/><path pathLength="1" d="M16 8 V16 L22 19"/></svg><span class="hand">Ich melde mich innerhalb von 48&nbsp;Stunden bei dir!</span></p>
+      </div>
+      <div class="cf-body">
+        <div class="cf-row">
+          <label class="fld"><span>Vorname*</span><input name="vorname" autocomplete="given-name" required></label>
+          <label class="fld"><span>Nachname*</span><input name="nachname" autocomplete="family-name" required></label>
+        </div>
+        <div class="cf-row">
+          <label class="fld"><span>E-Mail*</span><input type="email" name="email" autocomplete="email" required></label>
+          <label class="fld"><span>Telefon</span><input type="tel" name="telefon" autocomplete="tel" placeholder="für eine schnelle Rückmeldung"></label>
+        </div>
+        <label class="fld"><span>Straße &amp; Hausnummer*</span><input name="strasse" autocomplete="street-address" required></label>
+        <div class="cf-row cf-plz">
+          <label class="fld"><span>PLZ*</span><input name="plz" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" required></label>
+          <label class="fld"><span>Ort*</span><input name="ort" autocomplete="address-level2" required></label>
+        </div>
+        <fieldset class="chips">
+          <legend>Was interessiert dich?</legend>
+          <label><input type="radio" name="interesse" value="Personal Training" checked><span>Personal Training</span></label>
+          <label><input type="radio" name="interesse" value="Betriebssport / Firmenfitness"><span>Betriebssport / Firmenfitness</span></label>
+        </fieldset>
+        <fieldset class="chips">
+          <legend>Wie bist du auf den Sportsfreund aufmerksam geworden?</legend>
+          <label><input type="radio" name="quelle" value="Empfehlung"><span>Empfehlung</span></label>
+          <label><input type="radio" name="quelle" value="Google"><span>Google</span></label>
+          <label><input type="radio" name="quelle" value="Instagram"><span>Instagram</span></label>
+          <label><input type="radio" name="quelle" value="Facebook"><span>Facebook</span></label>
+          <label><input type="radio" name="quelle" value="Flyer / Plakat"><span>Flyer / Plakat</span></label>
+          <label><input type="radio" name="quelle" value="Sonstiges"><span>Sonstiges</span></label>
+          <input class="cf-other" name="quelle_text" placeholder="Von wem oder wo genau? (optional)" aria-label="Von wem oder wo genau?">
+        </fieldset>
+        <label class="fld"><span>Ein paar Zeilen über dich</span><textarea name="ueber" rows="5" placeholder="Schreib mir ein paar Zeilen über dich: Was machst du aktuell an Sport? Was ist dein Ziel? Gibt es Beschwerden oder Verletzungen, die ich kennen sollte?"></textarea></label>
+        <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+        <label class="consent"><input type="checkbox" name="datenschutz" value="1" required><span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden. Mehr dazu in der <button type="button" class="inline-btn" data-open="dlg-datenschutz">Datenschutzerklärung</button>.*</span></label>
+        <div class="cf-send">
+          <button class="btn" type="submit">Probestunde anfragen<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <small>* Pflichtfeld</small>
+        </div>
+        <p class="cf-msg" role="alert" hidden></p>
+      </div>
+      <div class="cf-done" hidden>
+        <svg class="draw" viewBox="0 0 120 120" aria-hidden="true"><circle pathLength="1" cx="60" cy="60" r="50"/><path pathLength="1" d="M36 62 L54 79 L86 43"/></svg>
+        <h3>Anfrage ist raus!</h3>
+        <p class="cf-done-text"></p>
+        <span class="hand">Bis bald, Sportsfreund!</span>
+      </div>
+    </form>
     <div class="contact-card" data-reveal style="--d:.15s">
       <div class="ci">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
@@ -860,6 +953,7 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
 <dialog class="legal" id="dlg-datenschutz" aria-labelledby="h-ds">
   <div class="legal-head"><h2 id="h-ds">Datenschutzerklärung</h2><button class="xbtn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="legal-body">
+    <p><b>Kontaktformular:</b> Wenn du über das Formular eine Probestunde anfragst, werden deine Angaben (Name, Kontaktdaten, Adresse und deine Nachricht) per E-Mail an Pascal Stempfle übermittelt und ausschließlich zur Bearbeitung deiner Anfrage verwendet. Eine Weitergabe an Dritte findet nicht statt. Du kannst die Löschung deiner Daten jederzeit per E-Mail an info@der-sports-freund.de verlangen.</p>
     <p>Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google“). Google Analytics verwendet sog. „Cookies“, Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
     <p>Im Falle der Aktivierung der IP-Anonymisierung auf dieser Website wird Ihre IP-Adresse von Google jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten, um Reports über die Websiteaktivitäten zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen gegenüber dem Websitebetreiber zu erbringen. Die im Rahmen von Google Analytics von Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von Google zusammengeführt. Sie können die Speicherung der Cookies durch eine entsprechende Einstellung Ihrer Browser-Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website vollumfänglich werden nutzen können. Sie können darüber hinaus die Erfassung der durch das Cookie erzeugten und auf Ihre Nutzung der Website bezogenen Daten (inkl. Ihrer IP-Adresse) an Google sowie die Verarbeitung dieser Daten durch Google verhindern, indem sie das unter dem folgenden Link verfügbare Browser-Plugin herunterladen und installieren: <a href="http://tools.google.com/dlpage/gaoptout?hl=de" target="_blank" rel="noopener">http://tools.google.com/dlpage/gaoptout?hl=de</a>.</p>
     <p>Sie können die Erfassung durch Google Analytics verhindern, indem Sie in den <button type="button" class="inline-btn" data-cookie-settings>Cookie-Einstellungen</button> die Kategorie „Performance“ deaktivieren. Es wird ein Opt-Out gespeichert, der die zukünftige Erfassung Ihrer Daten beim Besuch dieser Website verhindert.</p>
@@ -989,6 +1083,30 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
   var links=[].slice.call(menu.querySelectorAll('a'));
   if(canIO){var io3=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id)});}});},{rootMargin:'-45% 0px -50% 0px'});
     ['start','kundenstimmen','ueber-mich','personal-training','firmenfitness','kontakt'].forEach(function(id){var s=document.getElementById(id);if(s)io3.observe(s);});}
+
+  /* ---- Kontaktformular ---- */
+  var pf=document.getElementById('probe-form');
+  if(pf){
+    var msg=pf.querySelector('.cf-msg'),sendBtn=pf.querySelector('button[type=submit]'),body=pf.querySelector('.cf-body'),done=pf.querySelector('.cf-done');
+    function fail(t){msg.textContent=t;msg.hidden=false;}
+    pf.addEventListener('submit',function(e){
+      e.preventDefault();msg.hidden=true;
+      body.classList.add('was-checked');
+      if(!pf.checkValidity()){var bad=pf.querySelector(':invalid');if(bad){bad.focus();if(bad.reportValidity)bad.reportValidity();}return;}
+      sendBtn.disabled=true;
+      fetch(pf.action,{method:'POST',body:new FormData(pf),headers:{'Accept':'application/json'}})
+        .then(function(r){return r.json().catch(function(){return {ok:false};});})
+        .then(function(d){
+          if(!d.ok){throw new Error(d.message||'');}
+          done.querySelector('.cf-done-text').textContent=d.message;
+          body.hidden=true;done.hidden=false;
+          var svg=done.querySelector('.draw');setTimeout(function(){svg.classList.add('in');},50);
+          pf.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+        })
+        .catch(function(err){fail((err&&err.message)||'Das hat leider nicht geklappt. Schreib mir gern direkt an info@der-sports-freund.de oder ruf mich an: 0176 63600587.');})
+        .then(function(){sendBtn.disabled=false;});
+    });
+  }
 
   /* ---- Toast & Kopieren ---- */
   var toast=document.getElementById('toast'),tt;
