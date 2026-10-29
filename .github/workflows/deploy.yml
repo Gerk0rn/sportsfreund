@@ -1,0 +1,39 @@
+
+name: Deploy WD Website to STRATO
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: strato-deployment-wd
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy WD website via SFTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload website to /wd
+        uses: Dylan700/sftp-upload-action@v1.2.5
+        with:
+          server: ${{ secrets.STRATO_HOST }}
+          username: ${{ secrets.STRATO_USER }}
+          password: ${{ secrets.STRATO_PASSWORD }}
+          port: 22
+          uploads: |
+            ./ => /sf/
+          ignore: |
+            **/.git/**
+            **/.github/**
+            .git/**
+            .github/**
