@@ -9,7 +9,10 @@ ErrorDocument 404 /index.html
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Bestehende Dateien und Ordner (Bilder, Schriften, kontakt.php …) nie umleiten
+# Das Kontaktformular und die Startseite nie umleiten
+RewriteRule ^(kontakt\.php|index\.html)$ - [L,NC]
+
+# Bestehende Dateien und Ordner (Bilder, Schriften …) nie umleiten
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
