@@ -1103,8 +1103,11 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
       if(!pf.checkValidity()){var bad=pf.querySelector(':invalid');if(bad){bad.focus();if(bad.reportValidity)bad.reportValidity();}return;}
       sendBtn.disabled=true;
       fetch(pf.action,{method:'POST',body:new FormData(pf),headers:{'Accept':'application/json'}})
-        .then(function(r){return r.json().catch(function(){return {ok:false};});})
+        .then(function(r){return r.json().catch(function(){return {ok:false};});},
+              // Keine Antwort vom Server (z. B. „Failed to fetch“): ganz normal abschicken, kontakt.php zeigt dann eine Bestätigungsseite
+              function(){HTMLFormElement.prototype.submit.call(pf);return null;})
         .then(function(d){
+          if(!d)return;
           if(!d.ok){throw new Error(d.message||'');}
           done.querySelector('.cf-done-text').textContent=d.message;
           body.hidden=true;done.hidden=false;
