@@ -3,9 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Der Sportsfreund</title>
+<title>Der Sportsfreund – Personal Training &amp; Betriebssport in Bersenbrück</title>
 <meta name="description" content="Pascal Stempfle – Personal Training, Functional Training und Betriebssport/Firmenfitness in Bersenbrück und Umgebung. Jetzt kostenlose Probestunde vereinbaren.">
 <meta name="theme-color" content="#0f1b2d">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Der Sportsfreund">
+<meta property="og:title" content="Der Sportsfreund – Personal Training &amp; Betriebssport in Bersenbrück">
+<meta property="og:description" content="Personal Training, Functional Training und Betriebssport/Firmenfitness mit Pascal Stempfle in Bersenbrück und Umgebung. Jetzt kostenlose Probestunde vereinbaren.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SportsActivityLocation","name":"Der Sportsfreund – Pascal Stempfle","description":"Personal Training, Functional Training und Betriebssport/Firmenfitness in Bersenbrück und Umgebung.","founder":{"@type":"Person","name":"Pascal Stempfle","jobTitle":"Personal Trainer"},"telephone":"+49 176 63600587","email":"info@der-sports-freund.de","address":{"@type":"PostalAddress","streetAddress":"Repkamp 16","postalCode":"49593","addressLocality":"Bersenbrück","addressCountry":"DE"},"areaServed":"Bersenbrück und Umgebung","knowsAbout":["Personal Training","Functional Training","Betriebssport","Firmenfitness","Ernährungsberatung"]}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%230f1b2d'/%3E%3Cpath d='M14 17v-4a6 6 0 0 1 12 0v4' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='26' r='9' fill='%232456e8'/%3E%3C/svg%3E">
 <link rel="preload" as="image" href="bilder/hero.webp" imagesrcset="bilder/hero-720.webp 720w, bilder/hero.webp 1200w" imagesizes="(max-width:900px) min(84vw,440px), min(42vw,520px)" fetchpriority="high">
 <link rel="preload" href="fonts/big-shoulders-display.woff2" as="font" type="font/woff2" crossorigin>
@@ -1119,6 +1128,11 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
   /* ---- Dialoge ---- */
   document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){var d=document.getElementById(b.getAttribute('data-open'));if(!d)return;if(d.showModal)d.showModal();else d.setAttribute('open','');});});
   document.querySelectorAll('dialog').forEach(function(d){d.addEventListener('click',function(e){if(e.target===d)d.close();});d.querySelectorAll('[data-close]').forEach(function(x){x.addEventListener('click',function(){d.close()});});});
+
+  // Alte Unterseiten (Impressum, Datenschutz …) werden per .htaccess auf #… umgeleitet – dann den Dialog öffnen
+  var hashDlg={'#impressum':'dlg-impressum','#datenschutz':'dlg-datenschutz','#widerruf':'dlg-widerruf','#cookie-richtlinie':'dlg-cookie'};
+  function openFromHash(){var d=document.getElementById(hashDlg[location.hash.toLowerCase()]||'');if(d&&!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','');}}
+  openFromHash();addEventListener('hashchange',openFromHash);
 
   /* ---- Cookie-Banner ---- */
   var KEY='sportsfreund-cookies-v1',box=document.getElementById('cookie');

@@ -1,0 +1,30 @@
+# Weiterleitungen von den alten Unterseiten (alte Website / Google-Einträge)
+# auf die passenden Abschnitte der neuen Seite. 301 = dauerhaft umgezogen,
+# damit Google die alten Einträge auf die neue Seite überträgt.
+
+Options -MultiViews
+DirectoryIndex index.html
+ErrorDocument 404 /index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Bestehende Dateien und Ordner (Bilder, Schriften, kontakt.php …) nie umleiten
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Alte Unterseiten -> Abschnitte (NE: das # nicht kodieren, NC: Groß/Klein egal)
+RewriteRule (kundenstimme|referenz|bewertung|feedback|erfahrung) /#kundenstimmen [R=301,NE,NC,L]
+RewriteRule (ber-?mich|about|wer-?bin-?ich|vita|profil|pascal) /#ueber-mich [R=301,NE,NC,L]
+RewriteRule (betrieb|firm|unternehmen|gesundheitsmanagement|bgm) /#firmenfitness [R=301,NE,NC,L]
+RewriteRule (personal|functional|training|leistung|angebot|preise|ern.hrung|outdoor|studio) /#personal-training [R=301,NE,NC,L]
+RewriteRule (kontakt|probe|anfahrt|termin) /#kontakt [R=301,NE,NC,L]
+RewriteRule impressum /#impressum [R=301,NE,NC,L]
+RewriteRule (datenschutz|privacy) /#datenschutz [R=301,NE,NC,L]
+RewriteRule cookie /#cookie-richtlinie [R=301,NE,NC,L]
+RewriteRule widerruf /#widerruf [R=301,NE,NC,L]
+
+# Alle übrigen alten Adressen (z. B. /app/…, /s/…) auf die Startseite
+RewriteRule ^. / [R=301,L]
+</IfModule>
