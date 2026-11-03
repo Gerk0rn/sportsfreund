@@ -871,6 +871,7 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
         </fieldset>
         <label class="fld"><span>Ein paar Zeilen über dich</span><textarea name="ueber" rows="5" placeholder="Schreib mir ein paar Zeilen über dich: Was machst du aktuell an Sport? Was ist dein Ziel? Gibt es Beschwerden oder Verletzungen, die ich kennen sollte?"></textarea></label>
         <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+        <input type="hidden" name="t" value="">
         <label class="consent"><input type="checkbox" name="datenschutz" value="1" required><span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden. Mehr dazu in der <button type="button" class="inline-btn" data-open="dlg-datenschutz">Datenschutzerklärung</button>.*</span></label>
         <div class="cf-send">
           <button class="btn" type="submit">Probestunde anfragen<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -1095,6 +1096,7 @@ dialog.legal::backdrop{background:rgba(10,18,32,.65)}
   /* ---- Kontaktformular ---- */
   var pf=document.getElementById('probe-form');
   if(pf){
+    pf.elements.t.value=Date.now(); // Zeitfalle gegen Spam-Bots
     var msg=pf.querySelector('.cf-msg'),sendBtn=pf.querySelector('button[type=submit]'),body=pf.querySelector('.cf-body'),done=pf.querySelector('.cf-done');
     function fail(t){msg.textContent=t;msg.hidden=false;}
     pf.addEventListener('submit',function(e){
