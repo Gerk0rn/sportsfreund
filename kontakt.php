@@ -34,6 +34,31 @@ if (trim((string)($_POST['website'] ?? '')) !== '') {
   antwort(true, 'Danke! Ich melde mich innerhalb von 48 Stunden bei dir.');
 }
 
+$fake = 'Danke! Ich melde mich innerhalb von 48 Stunden bei dir.';
+
+// Nur Anfragen von der eigenen Seite annehmen
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if ($origin !== '' && parse_url($origin, PHP_URL_HOST) !== ($_SERVER['HTTP_HOST'] ?? '')) {
+  antwort(false, 'Ungültige Anfrage.', 403);
+}
+
+// Zeitfalle: Menschen brauchen mehr als 3 Sekunden zum Ausfüllen, Bots nicht
+$t = (int)($_POST['t'] ?? 0);
+$dauer = time() - intdiv($t, 1000);
+if ($t === 0 || $dauer < 3 || $dauer > 86400) {
+  antwort(true, $fake);
+}
+
+// Begrenzung: höchstens 3 Anfragen pro 10 Minuten von derselben Adresse
+$sperre = sys_get_temp_dir() . '/sf_' . hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . __FILE__);
+$liste = array_filter(
+  is_file($sperre) ? (array)json_decode((string)file_get_contents($sperre), true) : [],
+  fn($z) => is_int($z) && $z > time() - 600
+);
+if (count($liste) >= 3) {
+  antwort(false, 'Du hast gerade schon mehrere Anfragen geschickt. Bitte versuch es in ein paar Minuten noch einmal.', 429);
+}
+
 function feld(string $name, int $max = 200): string {
   $v = trim(strip_tags((string)($_POST[$name] ?? '')));
   $v = preg_replace('/[\r\n]+/', ' ', $v); // keine Zeilenumbrüche in einzeiligen Feldern
@@ -63,6 +88,11 @@ if (!$ds) {
   antwort(false, 'Bitte stimme der Verarbeitung deiner Daten zu.', 422);
 }
 
+// Typische Spam-Inhalte: viele Links oder Links in Namensfeldern
+if (preg_match_all('~https?://|www\.~i', $ueber) > 2 || preg_match('~https?://|www\.~i', "$vorname $nachname $ort $strasse")) {
+  antwort(true, $fake);
+}
+
 $wie = $quelle . ($quelle_text !== '' ? ' – ' . $quelle_text : '');
 $text = "Neue Anfrage für eine kostenlose Probestunde\n"
   . "============================================\n\n"
@@ -88,5 +118,8 @@ $kopf = implode("\r\n", [
 if (!@mail(EMPFAENGER, $betreff, $text, $kopf, '-f' . EMPFAENGER)) {
   antwort(false, 'Das hat leider nicht geklappt. Schreib mir gern direkt an ' . EMPFAENGER . ' oder ruf mich an.', 500);
 }
+
+$liste[] = time();
+@file_put_contents($sperre, json_encode(array_values($liste)), LOCK_EX);
 
 antwort(true, "Danke, $vorname! Ich melde mich innerhalb von 48 Stunden bei dir.");
