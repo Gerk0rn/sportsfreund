@@ -9,11 +9,19 @@ ErrorDocument 404 /index.html
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# Eine einzige Hauptadresse für Google: immer https://www.der-sports-freund.de
+RewriteCond %{HTTP_HOST} ^der-sports-freund\.de$ [NC]
+RewriteRule ^(.*)$ https://www.der-sports-freund.de/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^www\.der-sports-freund\.de$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^(.*)$ https://www.der-sports-freund.de/$1 [R=301,L]
+
 # Versteckte Dateien und Ordner (.git, .env …) sperren
 RewriteRule (^|/)\. - [F]
 
 # Das Kontaktformular und die Startseite nie umleiten
-RewriteRule ^(kontakt\.php|index\.html)$ - [L,NC]
+RewriteRule ^(kontakt\.php|index\.html|robots\.txt|sitemap\.xml)$ - [L,NC]
 
 # Bestehende Dateien und Ordner (Bilder, Schriften …) nie umleiten
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -21,18 +29,18 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # Alte Unterseiten -> Abschnitte (NE: das # nicht kodieren, NC: Groß/Klein egal)
-RewriteRule (kundenstimme|referenz|bewertung|feedback|erfahrung) /#kundenstimmen [R=301,NE,NC,L]
-RewriteRule (ber-?mich|about|wer-?bin-?ich|vita|profil|pascal) /#ueber-mich [R=301,NE,NC,L]
-RewriteRule (betrieb|firm|unternehmen|gesundheitsmanagement|bgm) /#firmenfitness [R=301,NE,NC,L]
-RewriteRule (personal|functional|training|leistung|angebot|preise|ern.hrung|outdoor|studio) /#personal-training [R=301,NE,NC,L]
-RewriteRule (kontakt|probe|anfahrt|termin) /#kontakt [R=301,NE,NC,L]
-RewriteRule impressum /#impressum [R=301,NE,NC,L]
-RewriteRule (datenschutz|privacy) /#datenschutz [R=301,NE,NC,L]
-RewriteRule cookie /#cookie-richtlinie [R=301,NE,NC,L]
-RewriteRule widerruf /#widerruf [R=301,NE,NC,L]
+RewriteRule (kundenstimme|referenz|bewertung|feedback|erfahrung) https://www.der-sports-freund.de/#kundenstimmen [R=301,NE,NC,L]
+RewriteRule (ber-?mich|about|wer-?bin-?ich|vita|profil|pascal) https://www.der-sports-freund.de/#ueber-mich [R=301,NE,NC,L]
+RewriteRule (betrieb|firm|unternehmen|gesundheitsmanagement|bgm) https://www.der-sports-freund.de/#firmenfitness [R=301,NE,NC,L]
+RewriteRule (personal|functional|training|leistung|angebot|preise|ern.hrung|outdoor|studio) https://www.der-sports-freund.de/#personal-training [R=301,NE,NC,L]
+RewriteRule (kontakt|probe|anfahrt|termin) https://www.der-sports-freund.de/#kontakt [R=301,NE,NC,L]
+RewriteRule impressum https://www.der-sports-freund.de/#impressum [R=301,NE,NC,L]
+RewriteRule (datenschutz|privacy) https://www.der-sports-freund.de/#datenschutz [R=301,NE,NC,L]
+RewriteRule cookie https://www.der-sports-freund.de/#cookie-richtlinie [R=301,NE,NC,L]
+RewriteRule widerruf https://www.der-sports-freund.de/#widerruf [R=301,NE,NC,L]
 
 # Alle übrigen alten Adressen (z. B. /app/…, /s/…) auf die Startseite
-RewriteRule ^. / [R=301,L]
+RewriteRule ^. https://www.der-sports-freund.de/ [R=301,L]
 </IfModule>
 
 # ---------- Sicherheit ----------
