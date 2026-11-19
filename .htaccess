@@ -23,17 +23,24 @@ RewriteRule (^|/)\. - [F]
 # Das Kontaktformular und die Startseite nie umleiten
 RewriteRule ^(kontakt\.php|index\.html|robots\.txt|sitemap\.xml)$ - [L,NC]
 
+# Hilfsskript nicht ausliefern
+RewriteRule ^build-unterseiten\.py$ - [F]
+
+# Unterseiten immer mit Schrägstrich am Ende, direkt auf https://www
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+[^/])$ https://www.der-sports-freund.de/$1/ [R=301,L]
+
 # Bestehende Dateien und Ordner (Bilder, Schriften …) nie umleiten
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # Alte Unterseiten -> Abschnitte (NE: das # nicht kodieren, NC: Groß/Klein egal)
-RewriteRule (kundenstimme|referenz|bewertung|feedback|erfahrung) https://www.der-sports-freund.de/#kundenstimmen [R=301,NE,NC,L]
-RewriteRule (ber-?mich|about|wer-?bin-?ich|vita|profil|pascal) https://www.der-sports-freund.de/#ueber-mich [R=301,NE,NC,L]
-RewriteRule (betrieb|firm|unternehmen|gesundheitsmanagement|bgm) https://www.der-sports-freund.de/#firmenfitness [R=301,NE,NC,L]
-RewriteRule (personal|functional|training|leistung|angebot|preise|ern.hrung|outdoor|studio) https://www.der-sports-freund.de/#personal-training [R=301,NE,NC,L]
-RewriteRule (kontakt|probe|anfahrt|termin) https://www.der-sports-freund.de/#kontakt [R=301,NE,NC,L]
+RewriteRule (kundenstimme|referenz|bewertung|feedback|erfahrung) https://www.der-sports-freund.de/kundenstimmen/ [R=301,NE,NC,L]
+RewriteRule (ber-?mich|about|wer-?bin-?ich|vita|profil|pascal) https://www.der-sports-freund.de/ueber-mich/ [R=301,NE,NC,L]
+RewriteRule (betrieb|firm|unternehmen|gesundheitsmanagement|bgm) https://www.der-sports-freund.de/betriebssport-firmenfitness/ [R=301,NE,NC,L]
+RewriteRule (personal|functional|training|leistung|angebot|preise|ern.hrung|outdoor|studio) https://www.der-sports-freund.de/personal-training/ [R=301,NE,NC,L]
+RewriteRule (kontakt|probe|anfahrt|termin) https://www.der-sports-freund.de/kontakt/ [R=301,NE,NC,L]
 RewriteRule impressum https://www.der-sports-freund.de/#impressum [R=301,NE,NC,L]
 RewriteRule (datenschutz|privacy) https://www.der-sports-freund.de/#datenschutz [R=301,NE,NC,L]
 RewriteRule cookie https://www.der-sports-freund.de/#cookie-richtlinie [R=301,NE,NC,L]

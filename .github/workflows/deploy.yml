@@ -23,6 +23,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Unterseiten aus index.html erzeugen
+        run: python3 build-unterseiten.py
+
       - name: Upload website to /wd
         uses: Dylan700/sftp-upload-action@v1.2.5
         with:
@@ -33,6 +36,7 @@ jobs:
           uploads: |
             ./ => /sf/
           ignore: |
+            build-unterseiten.py
             **/.git/**
             **/.github/**
             .git/**
