@@ -38,7 +38,7 @@ $fake = 'Danke! Ich melde mich innerhalb von 48 Stunden bei dir.';
 
 // Nur Anfragen von der eigenen Seite annehmen
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if ($origin !== '' && parse_url($origin, PHP_URL_HOST) !== ($_SERVER['HTTP_HOST'] ?? '')) {
+if ($origin !== '' && strtolower((string)parse_url($origin, PHP_URL_HOST)) !== strtolower(preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''))) {
   antwort(false, 'Ungültige Anfrage.', 403);
 }
 
